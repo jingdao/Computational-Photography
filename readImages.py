@@ -1,4 +1,5 @@
-from scipy import misc
+#from scipy import misc
+from scipy import ndimage
 import math
 
 f=open('memorial/memorial.hdr_image_list.txt')
@@ -13,7 +14,7 @@ for s in f:
 	imFile=sArray[0].replace('.ppm','.png')
 	exposureTime=math.log(1/float(sArray[1]))
 	B.append(exposureTime)
-	imArr=misc.imread('memorial/'+imFile)
+	imArr=ndimage.imread('memorial/'+imFile)
 	numImages+=1
 	numPixels+=imArr.shape[0]*imArr.shape[1]
 print numImages,numPixels
