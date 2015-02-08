@@ -5,6 +5,8 @@ import numpy as np
 import math
 import random
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.colors
 from rfsolver import rfsolve
 
 #returns red,green,blue pixel values from images files at different exposure times
@@ -24,6 +26,11 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	zRed=[]
 	zGreen=[]
 	zBlue=[]
+	finalRed=[]
+	finalGreen=[]
+	finalBlue=[]
+	imWidth=0
+	imHeight=0
 	pixelSamples=set()
 	for s in f:
 		sArray=s.split(' ')
@@ -34,14 +41,11 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 		imRed=imArr[:,:,0]
 		imGreen=imArr[:,:,1]
 		imBlue=imArr[:,:,2]
-		imSize=imRed.shape[0]*imRed.shape[1]
 		if len(pixelSamples)==0:
-			while len(pixelSamples)<numSamples:
-				i=random.randint(0,imSize-1)
-				pixelSamples.add(i)
-			finalRed=imRed
-			finalGreen=imGreen
-			finalBlue=imBlue
+			imWidth=imRed.shape[1]
+			imHeight=imRed.shape[0]
+			imSize=imRed.shape[0]*imRed.shape[1]
+			pixelSamples=getSamplingDomain(imRed,numSamples,imSize)
 		imRed1D=[]
 		imGreen1D=[]
 		imBlue1D=[]
@@ -49,6 +53,9 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			imRed1D.append(imRed[i%imRed.shape[0],i/imRed.shape[0]])
 			imGreen1D.append(imGreen[i%imGreen.shape[0],i/imGreen.shape[0]])
 			imBlue1D.append(imBlue[i%imBlue.shape[0],i/imBlue.shape[0]])
+		finalRed.append(np.mat(imRed).A1)
+		finalGreen.append(np.mat(imGreen).A1)
+		finalBlue.append(np.mat(imBlue).A1)
 		zRed.append(imRed1D)
 		zGreen.append(imGreen1D)
 		zBlue.append(imBlue1D)
@@ -60,6 +67,9 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	zRed=np.transpose(np.array(zRed))
 	zGreen=np.transpose(np.array(zGreen))
 	zBlue=np.transpose(np.array(zBlue))
+	finalRed=np.transpose(np.array(finalRed))
+	finalGreen=np.transpose(np.array(finalGreen))
+	finalBlue=np.transpose(np.array(finalBlue))
 	w=np.ones((n,1))
 	Zmin = 0
 	Zmax = 255
@@ -69,7 +79,16 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			w[i]=i-Zmin
 		else:
 			w[i]=Zmax-i
-	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue
+	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth
+
+def getSamplingDomain(imIntensity,numSamples,imSize):
+	plt.imshow(imIntensity,cmap=cm.Greys_r)
+	plt.show()
+	pixelSamples=[]
+	while len(pixelSamples)<numSamples:
+		i=random.randint(0,imSize-1)
+		pixelSamples.append(i)
+	return pixelSamples
 
 #generates a plot of pixel value, z against the function g(z)
 #color: determines the color of the plot
@@ -86,7 +105,7 @@ def plotZandG(z,g,color):
 
 
 if __name__=="__main__":
-	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
+	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
 	l=1
 	gRed,eRed=rfsolve(zRed,B,l,w)
 	gGreen,eGreen=rfsolve(zGreen,B,l,w)
