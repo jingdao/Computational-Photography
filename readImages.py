@@ -39,6 +39,9 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			while len(pixelSamples)<numSamples:
 				i=random.randint(0,imSize-1)
 				pixelSamples.add(i)
+			finalRed=imRed
+			finalGreen=imGreen
+			finalBlue=imBlue
 		imRed1D=[]
 		imGreen1D=[]
 		imBlue1D=[]
@@ -66,7 +69,7 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			w[i]=i-Zmin
 		else:
 			w[i]=Zmax-i
-	return zRed,zGreen,zBlue,B,w
+	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue
 
 #generates a plot of pixel value, z against the function g(z)
 #color: determines the color of the plot
@@ -83,7 +86,7 @@ def plotZandG(z,g,color):
 
 
 if __name__=="__main__":
-	zRed,zGreen,zBlue,B,w = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
+	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
 	l=1
 	gRed,eRed=rfsolve(zRed,B,l,w)
 	gGreen,eGreen=rfsolve(zGreen,B,l,w)
