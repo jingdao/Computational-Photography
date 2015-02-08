@@ -17,7 +17,8 @@ n = 256
 l = 1.0 #smoothness
 
 
-numSamples = 100 #sample numSamples random pixels to calculate response function
+numSamples = 1000 #sample numSamples random pixels to calculate response function
+numImagesToUse = 2
 
 '''
 #take in images one RGB channel at a time, get response function
@@ -60,19 +61,22 @@ def scaleHDR(raw_map, scale):
 if __name__=="__main__":
 	#height is number of rows, width is number of columns
 	imagesRed,imagesGreen,imagesBlue,exposures,weights, finalImageRed, \
-	finalImageGreen, finalImageBlue,numColsInImage,numRowsInImage \
+	finalImageGreen, finalImageBlue,numRowsInImage,numColsInImage \
 	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
+	print "got pixel arrays"
 	
 	rfRed_sample,hdrMapRed_sample = rfsolve(imagesRed,exposures,l,weights)
 	rfGreen_sample, hdrMapGreen_sample = rfsolve(imagesGreen,exposures,l,weights)
-	rfBlue_sample, hdrMapBlue_sample = rfsolve(imagesBlue,exposures,l,weights,)
-	
-	hdrMapRed_finalImage = create_map(rfRed_sample,finalImageRed,exposures,weights,numRowsInImage,numColsInImage)
-	hdrMapGreen_finalImage = create_map(rfGreen_sample,finalImageGreen,exposures,weights,numRowsInImage,numColsInImage)
-	hdrMapBlue_finalImage = create_map(rfBlue_sample,finalImageBlue,exposures,weights,numRowsInImage,numColsInImage)
+	rfBlue_sample, hdrMapBlue_sample = rfsolve(imagesBlue,exposures,l,weights)
+	print "solved for response functions"
 
-	print "displaying based on hdr map of final image"
-	displayHDR(hdrMapRed_finalImage,hdrMapGreen_finalImage, hdrMapBlue_finalImage)
+	hdrMapRed_images = create_map(rfRed_sample,finalImageRed,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
+	print "got first hdr map"
+	hdrMapGreen_images = create_map(rfGreen_sample,finalImageGreen,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
+	hdrMapBlue_images = create_map(rfBlue_sample,finalImageBlue,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
+
+	print "displaying based on hdr map of images"
+	displayHDR(hdrMapRed_images,hdrMapGreen_images, hdrMapBlue_images)
 
 
 

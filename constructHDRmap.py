@@ -22,10 +22,10 @@ n = 256
 #E(i) a HDR radiance map
 
 #note: each "image" is one RGB channel of an image, as in the paper
-
-def create_map(rFunc,images,exposures,weights,numRowsInImage,numColsInImage):
+def create_map(rFunc,images,exposures,weights,numRowsInImage,numColsInImage,numImages):
 	numPixels = images.shape[0]
-	numImages = images.shape[1]
+	if numImages > images.shape[1]: #user tries to use more images than they have
+		numImages = images.shape[1]
 	#High dynamic range radiance map
 	#hdrMap is an array of with as many entries as there are pixels in any of our images
 	#one entry corresponds to the HDR value of a given pixel in the radiance map
@@ -38,10 +38,16 @@ def create_map(rFunc,images,exposures,weights,numRowsInImage,numColsInImage):
 		
 		#use pixel values for a given pixel from all the images
 		#difference between response function and exposure, weighted appropriately(?)
-		for image in range(0,numImages):
-			num += weights[imagesl[pixel,image]]*(rFunc[images[pixel,image]] - exposures[image])
-			denom += weights[images[pixel,image]]
 		
+		#for now test with just 2 images
+		for image in range(0,numImages):
+			num += weights[images[pixel,image]]*(rFunc[images[pixel,image]] - exposures[image])
+			denom += weights[images[pixel,image]]
+			
+		#fix for now if zero denominator: make some small value instead
+		if denom == 0:
+			#print "zero denominator"
+			denom = 10**-4
 		lnEi = num/denom
 		hdrMap.append(math.exp(lnEi))
 	hdrMap = np.reshape(hdrMap, (numRowsInImage, numColsInImage))
