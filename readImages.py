@@ -45,7 +45,8 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			imWidth=imRed.shape[1]
 			imHeight=imRed.shape[0]
 			imSize=imRed.shape[0]*imRed.shape[1]
-			pixelSamples=getSamplingDomain(imRed,numSamples,imSize)
+			imIntensity=matplotlib.colors.rgb_to_hsv(np.dstack((1.0*imRed/255,1.0*imGreen/255,1.0*imBlue/255)))[:,:,2]
+			pixelSamples=getSamplingDomain(imIntensity,numSamples,imSize)
 		imRed1D=[]
 		imGreen1D=[]
 		imBlue1D=[]
@@ -82,8 +83,9 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth
 
 def getSamplingDomain(imIntensity,numSamples,imSize):
-	plt.imshow(imIntensity,cmap=cm.Greys_r)
-	plt.show()
+#	plt.imshow(imIntensity,cmap=cm.Greys_r)
+#	plt.imshow(imIntensity)
+#	plt.show()
 	pixelSamples=[]
 	while len(pixelSamples)<numSamples:
 		i=random.randint(0,imSize-1)
@@ -106,12 +108,12 @@ def plotZandG(z,g,color):
 
 if __name__=="__main__":
 	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
-	l=1
-	gRed,eRed=rfsolve(zRed,B,l,w)
-	gGreen,eGreen=rfsolve(zGreen,B,l,w)
-	gBlue,eBlue=rfsolve(zBlue,B,l,w)
-	plotZandG(zRed,gRed,'rx')
-	plotZandG(zGreen,gGreen,'gx')
-	plotZandG(zBlue,gBlue,'bx')
-	plt.axis([-10,5,0,260])
-	plt.show()
+#	l=1
+#	gRed,eRed=rfsolve(zRed,B,l,w)
+#	gGreen,eGreen=rfsolve(zGreen,B,l,w)
+#	gBlue,eBlue=rfsolve(zBlue,B,l,w)
+#	plotZandG(zRed,gRed,'rx')
+#	plotZandG(zGreen,gGreen,'gx')
+#	plotZandG(zBlue,gBlue,'bx')
+#	plt.axis([-10,5,0,260])
+#	plt.show()
