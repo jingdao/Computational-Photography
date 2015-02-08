@@ -51,11 +51,6 @@ def readInput():
 		
 		numImages+=1
 		numPixels+=imArr.shape[0]*imArr.shape[1]
-	
-	#testing
-	print "reading out input: "
-	print numImages,numPixels
-	print exposures
 	f.close()
 	
 	return images, exposures
@@ -86,20 +81,35 @@ def imageMatricesToHDR(images, exposures, smoothness, weights, channel):
 	#so that columns are images, per how the response function calculator accepts input	
 	Z = Z.transpose()
 	
-	print "solving for the response function"
-	g = rfsolve(Z,exposures,smoothness, weights)[0]
-	
-	print "creating the radiance map"
-	hdrmap = create_map(g,Z,exposures,weights,numPixels,numImages)
+	print "solving for the response function and radiance map"
+	rfMap = rfsolve(Z,exposures,smoothness, weights)
+	g = rfMap[0] #response function
+	hdrmap = np.exp(rfMap[1]) #radiance map (of log exposures, so take exponential to get exposures)
 	
 	#reshape map to have same shape as one of the images instead of a very long array
 	hdrmap = np.reshape(hdrmap, np.shape(firstImage[:,:,channel]))
 	return hdrmap
 
 #display the HDR map with different options	
-def displayHDR(mapRed,mapGreen,mapBlue):
-	print "Our HDR map has shape ", np.shape(mapRed)
-	print "HDR map: ", mapRed
+def displayHDR(mapRed,mapGreen,mapBlue):	
+	scaledRed = scaleHDR(mapRed, 10**-3)
+	#scaledGreen = scaleHDR(mapGreen,10**-3)
+	#scaledBlue = scaleHDR(mapBlue,10**-3)
+	
+#everything above 0.1% of the highest value gets mapped to 255
+#if x is the scale factor of the highest value, multiply x by 255/x so that x gets mapped to 255 as well
+#multiply everything else by 255/x
+def scaleHDR(raw_map, scale):
+	maxValue = np.max(raw_map)
+	print "max value in raw map: ", np.max(raw_map)
+	print "min value in raw map: ", np.min(raw_map)
+	scaledMax = scale * maxValue
+	scalingValue = Zmax/scaledMax
+	print "scaling value: ", scalingValue
+	print "how large the min is, when scaled: ", np.min(raw_map)*scalingValue
+	scaledMap = scalingValue * raw_map
+	scaledMap[scaledMap > Zmax] = Zmax
+	return scaledMap
 	
 
 #run the program	
@@ -112,9 +122,9 @@ exposures = inputImagesExposures[1]
 weights = np.ones((n,1)) #calculate weights (as done in the paper)
 for i in range(0,n):
 	if i <= Zmid:
-		w[i] = i-Zmin
+		weights[i] = i-Zmin
 	else:
-		w[i] = Zmax-i
+		weights[i] = Zmax-i
 
 #gets HDR map for our input, using the red channel (channel 0)
 #green channel (channel 1)
@@ -122,7 +132,7 @@ for i in range(0,n):
 hdrMapRed = imageMatricesToHDR(images,exposures,l,weights,RED)
 hdrMapGreen = imageMatricesToHDR(images,exposures,l,weights,GREEN)
 hdrMapBlue = imageMatricesToHDR(images,exposures,l,weights,BLUE)
-displayHDR(hdrMap0,hdrMap1, hdrMap2)
+displayHDR(hdrMapRed,hdrMapGreen, hdrMapBlue)
 	
 	
 
