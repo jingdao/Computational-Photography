@@ -17,18 +17,19 @@ n = 256
 l = 1.0 #smoothness
 
 
-imageSize = 25 #sample imageSizeximageSize piece of image for testing
+numSamples = 100 #sample numSamples random pixels to calculate response function
 
+'''
 #take in images one RGB channel at a time, get response function
 #take response function and images, get HDR map
+#now trimmed down so it basically just calls rfsolve...
 def imageMatricesToHDR(images, exposures, smoothness, weights):
 	print "solving for the response function and radiance map"
 	rfMap = rfsolve(images,exposures,smoothness, weights)
 	g = rfMap[0] #response function
 	hdrmap = np.exp(rfMap[1]) #radiance map (of log exposures, so take exponential to get exposures)
-	#reshape map to have same shape as one of the images instead of a very long array
-	#hdrmap = np.reshape(hdrmap, np.shape(firstImage))
-	return hdrmap
+	return g, hdrmap
+'''
 
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
@@ -57,11 +58,21 @@ def scaleHDR(raw_map, scale):
 	
 #run the program
 if __name__=="__main__":
-	imagesRed,imagesGreen,imagesBlue,exposures,weights = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt')
-	hdrMapRed = imageMatricesToHDR(imagesRed,exposures,l,weights)
-	hdrMapGreen = imageMatricesToHDR(imagesGreen,exposures,l,weights)
-	hdrMapBlue = imageMatricesToHDR(imagesBlue,exposures,l,weights,)
-	displayHDR(hdrMapRed,hdrMapGreen, hdrMapBlue)
+	#height is number of rows, width is number of columns
+	imagesRed,imagesGreen,imagesBlue,exposures,weights, finalImageRed, \
+	finalImageGreen, finalImageBlue,numColsInImage,numRowsInImage \
+	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
+	
+	rfRed_sample,hdrMapRed_sample = rfsolve(imagesRed,exposures,l,weights)
+	rfGreen_sample, hdrMapGreen_sample = rfsolve(imagesGreen,exposures,l,weights)
+	rfBlue_sample, hdrMapBlue_sample = rfsolve(imagesBlue,exposures,l,weights,)
+	
+	hdrMapRed_finalImage = create_map(rfRed_sample,finalImageRed,exposures,weights,numRowsInImage,numColsInImage)
+	hdrMapGreen_finalImage = create_map(rfGreen_sample,finalImageGreen,exposures,weights,numRowsInImage,numColsInImage)
+	hdrMapBlue_finalImage = create_map(rfBlue_sample,finalImageBlue,exposures,weights,numRowsInImage,numColsInImage)
+
+	print "displaying based on hdr map of final image"
+	displayHDR(hdrMapRed_finalImage,hdrMapGreen_finalImage, hdrMapBlue_finalImage)
 
 
 
