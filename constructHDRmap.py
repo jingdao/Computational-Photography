@@ -1,5 +1,6 @@
 #Based on Debevec and Malik (SIGGRAPH 1997), 
 #"Recovering High Dynamic Range Radiance Maps from Photographs"
+#REDUNDANT: this calculation is done in the rfsolver method as well
 
 import numpy as np
 import math as math
@@ -39,21 +40,6 @@ def create_map(g,Z,B,w,numPixels,numImages):
 		lnEi = num/denom
 		hdrMap.append(math.exp(lnEi)) #do I need to append E_i or ln(E_i)?
 	return hdrMap
-
-
-
-
-#test	
-numPixels = 16
-numImages = 2
-
-Z = np.zeros((numPixels,numImages))
-g = np.ones(n)
-w = np.ones(n)
-B = np.ones(numImages)
-
-print create_map(g,Z,B,w,numPixels,numImages)
-#should be just ones, since each entry of the radiance map is e^0 = 1
 	
 
 
