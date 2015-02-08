@@ -10,25 +10,28 @@ import matplotlib.pyplot as plt
 #B(j): log delta t, or log shutter speed, for image j
 #l: lambda, the constant that determines the amount of smoothness
 #w(z): weighting function value for pixel value z
+#numImagesToUse how many images to use (say you use the first x images)
 
 #returns:
 #g(z): log exposure corresponding to pixel value z
 #lE(i) is the log film irradiance at pixel location i
 
-def rfsolve(Z,B,l,w):
+def rfsolve(Z,B,l,w, numImagesToUse):
+	if numImagesToUse > np.size(Z,1): #user tries to use more images than they have
+		numImagesToUse = np.size(Z,1)
+	
 	n = 256
-	#print "term 1: ", np.size(Z,1)#*np.size(Z,2)+n+1
 	A = np.zeros( (np.size(Z,0)*np.size(Z,1)+n+1,n+np.size(Z,0)) );
-	b = np.zeros( (np.size(A,0),1) ) #or l?
+	b = np.zeros( (np.size(A,0),1) )
 	
 	#Include the data fitting equations
 	k = 0
 	for i in range(0,np.size(Z,0)):
-		for j in range(0,np.size(Z,1)):
-			wij = w[Z[i,j]] #do I need the +1?
-			A[k,Z[i,j]] = wij #do I need the +1?
+		for j in range(0,numImagesToUse):
+			wij = w[Z[i,j]] 
+			A[k,Z[i,j]] = wij 
 			A[k,n+i] = -1*wij
-			b[k,0] = wij * B[j] #originally B[i,j] but B is a vector???
+			b[k,0] = wij * B[j]
 			k += 1
 
 	#Fix the curve

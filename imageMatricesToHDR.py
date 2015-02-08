@@ -14,23 +14,11 @@ Zmax = 255
 Zmid = (Zmax + Zmin)/2
 
 n = 256
-l = 1.0 #smoothness
+l = 100.0 #smoothness
 
 
-numSamples = 1000 #sample numSamples random pixels to calculate response function
-numImagesToUse = 2
-
-'''
-#take in images one RGB channel at a time, get response function
-#take response function and images, get HDR map
-#now trimmed down so it basically just calls rfsolve...
-def imageMatricesToHDR(images, exposures, smoothness, weights):
-	print "solving for the response function and radiance map"
-	rfMap = rfsolve(images,exposures,smoothness, weights)
-	g = rfMap[0] #response function
-	hdrmap = np.exp(rfMap[1]) #radiance map (of log exposures, so take exponential to get exposures)
-	return g, hdrmap
-'''
+numSamples = 100 #sample numSamples random pixels to calculate response function
+numImagesToUse = 8
 
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
@@ -52,30 +40,40 @@ def scaleHDR(raw_map, scale):
 	print "min value in raw map: ", np.min(raw_map)
 	scaledMax = scale * maxValue
 	scalingValue = Zmax/scaledMax
-	print "how large the min is, when scaled: ", np.min(raw_map)*scalingValue
 	scaledMap = scalingValue * raw_map
 	scaledMap[scaledMap > Zmax] = Zmax
+	print "min value in scaled map: ", np.min(scaledMap)
+	print "max value in scaled map: ", np.max(scaledMap)
 	return scaledMap
 	
 #run the program
 if __name__=="__main__":
 	#height is number of rows, width is number of columns
-	imagesRed,imagesGreen,imagesBlue,exposures,weights, finalImageRed, \
-	finalImageGreen, finalImageBlue,numRowsInImage,numColsInImage \
+	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
+	imageGreen, imageBlue,numRowsInImage,numColsInImage \
 	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
 	print "got pixel arrays"
 	
-	rfRed_sample,hdrMapRed_sample = rfsolve(imagesRed,exposures,l,weights)
-	rfGreen_sample, hdrMapGreen_sample = rfsolve(imagesGreen,exposures,l,weights)
-	rfBlue_sample, hdrMapBlue_sample = rfsolve(imagesBlue,exposures,l,weights)
+	
+	rfRed_sample,hdrMapRed_sample = rfsolve(sampleRed,exposures,l,weights,numImagesToUse)
+	rfGreen_sample, hdrMapGreen_sample = rfsolve(sampleGreen,exposures,l,weights,numImagesToUse)
+	rfBlue_sample, hdrMapBlue_sample = rfsolve(sampleBlue,exposures,l,weights,numImagesToUse)
 	print "solved for response functions"
 
-	hdrMapRed_images = create_map(rfRed_sample,finalImageRed,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
+	hdrMapRed_images = create_map(rfRed_sample,imageRed,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
 	print "got first hdr map"
-	hdrMapGreen_images = create_map(rfGreen_sample,finalImageGreen,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
-	hdrMapBlue_images = create_map(rfBlue_sample,finalImageBlue,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
-
-	print "displaying based on hdr map of images"
+	hdrMapGreen_images = create_map(rfGreen_sample,imageGreen,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
+	print "got second hdr map"
+	hdrMapBlue_images = create_map(rfBlue_sample,imageBlue,exposures,weights,numRowsInImage,numColsInImage,numImagesToUse)
+	'''
+	rfRed_images, hdrMapRed_images = rfsolve(imageRed,exposures,l,weights,numImagesToUse)
+	print "got first hdr map"
+	rfGreen_images, hdrMapGreen_images = rfsolve(imageGreen,exposures,l,weights,numImagesToUse)
+	print "got second hdr map"
+	rfBlue_images, hdrMapBlue_images = rfsolve(imageBlue,exposures,l,weights,numImagesToUse)
+	'''
+	
+	print "got last hdr map, displaying based on hdr map of images"
 	displayHDR(hdrMapRed_images,hdrMapGreen_images, hdrMapBlue_images)
 
 
