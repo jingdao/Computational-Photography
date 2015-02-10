@@ -44,12 +44,13 @@ def create_map(rFunc,images,exposures,weights,numRowsInImage,numColsInImage,numI
 			num += weights[images[pixel,image]]*(rFunc[images[pixel,image]] - exposures[image])
 			denom += weights[images[pixel,image]]
 			
-		#fix for now if zero denominator: make some small value instead
+		#fix for if zero denominator: make some small value instead (doesn't matter much what)
+		#if weights sum to 0, the fraction will be 0 (and it approaches zero as weights sum approaches 0)
 		if denom == 0:
-			#print "zero denominator"
 			denom = 10**-4
 		lnEi = num/denom
 		hdrMap.append(math.exp(lnEi))
+		
 	hdrMap = np.reshape(hdrMap, (numRowsInImage, numColsInImage))
 	return hdrMap
 	

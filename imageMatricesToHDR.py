@@ -4,6 +4,8 @@ import numpy as np
 from scipy import ndimage
 import matplotlib as plt
 import math
+import cProfile, pstats, StringIO
+
 from readImages import *
 from constructHDRmap import *
 from rfsolver import *
@@ -48,6 +50,10 @@ def scaleHDR(raw_map, scale):
 	
 #run the program
 if __name__=="__main__":
+	#start profiler
+	pr = cProfile.Profile()
+	pr.enable()
+	
 	#height is number of rows, width is number of columns
 	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
 	imageGreen, imageBlue,numRowsInImage,numColsInImage \
@@ -74,7 +80,22 @@ if __name__=="__main__":
 	'''
 	
 	print "got last hdr map, displaying based on hdr map of images"
+	#end profiler
+	pr.disable()
+	s = StringIO.StringIO()
+	sortby = "cumtime"
+	ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+	ps.print_stats()
+	print s.getvalue()
 	displayHDR(hdrMapRed_images,hdrMapGreen_images, hdrMapBlue_images)
+	print "size of response function for red channel: ", rfRed_sample.size
+	
+	#plot the response functions
+	x = np.zeros(rfRed_sample.size)
+	for i in range(0,x.size):
+		x[i] = i
+	plt.plot(x,rfRed_sample, "r-", x,rfGreen_sample, "g-", x,rfBlue_sample, "b-")
+	plt.show()
 
 
 
