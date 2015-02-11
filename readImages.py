@@ -9,12 +9,14 @@ import matplotlib.cm as cm
 import matplotlib.colors
 from rfsolver import rfsolve
 from estimateNoise import *
+from imageMatricesToHDR import *
 
 numNoiseSamples = 100 #how many samples to take from each RGB channel of each image to estimate noise
 n = 256 #number of possible RGB values
 Zmin = 0 #minimum possible RGB value
 Zmax = 255 #maximum possible RGB value
 Zmid = (Zmin+Zmax)/2 #halfway between min and max possible values
+samplingMethod = "intensity" #which method to sample pixels for construction of response curve
 
 #returns red,green,blue pixel values from images files at different exposure times
 #also generates the ln(delta_t) array and the weight array
@@ -101,7 +103,7 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	#use to see how large we want smoothness parameter lambda to be
 	#(idea: more noise: want more emphasis on smoothness)
 	meanNoiseValue = sum(noiseValues)/float(len(noiseValues))
-	print "mean sum of squared noise value in our set of images: ", meanNoiseValue
+#	print "mean sum of squared noise value in our set of images: ", meanNoiseValue
 	
 	#calculate weights
 	w=np.ones((n,1))
@@ -113,43 +115,38 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue
 
 def getSamplingDomain(imIntensity,numSamples,imSize):
-#	imGradient = np.zeros((imIntensity.shape[0]-1,imIntensity.shape[1]-1))
-#	for i in range(0,imIntensity.shape[0]-1):
-#		for j in range(0,imIntensity.shape[1]-1):
-#			imGradient[i,j]=(imIntensity[i,j+1]-imIntensity[i,j])**2+(imIntensity[i+1,j]-imIntensity[i,j])**2
-#	x=[]
-#	y=[]
-#	intensityDict={}
-#	minIntensity=np.min(imIntensity)
-#	maxIntensity=np.max(imIntensity)
-#	for i in range(0,imIntensity.shape[0]):
-#		for j in range(0,imIntensity.shape[1]):
-#			intensityDict[imIntensity[i,j]]=(i,j)
-#	print minIntensity,maxIntensity,len(intensityDict)
-#	sortedIntensity=sorted(intensityDict)
-#	pixelSamples=set()
-#	pixelSamples.add(0)
-#	for i in range(0,numSamples):
-#		intensityToFind=minIntensity+(maxIntensity-minIntensity)/numSamples*i
-#		print intensityToFind
-	
-#	pixelSamples=[]
-#	for i in intensityDict:
-#		x.append(intensityDict[i][1])
-#		y.append(intensityDict[i][0])
-#		pixelSamples.append(intensityDict[i][0]+intensityDict[i][1]*imIntensity.shape[0])
-
+	x=[]
+	y=[]
+	intensityDict={}
+	for i in range(0,imIntensity.shape[0]):
+		for j in range(0,imIntensity.shape[1]):
+			if imIntensity[i,j] not in intensityDict:
+				intensityDict[imIntensity[i,j]]=(i,j)
+			elif imIntensity[i,j] in intensityDict:
+				if random.randint(0,100)==0:
+					intensityDict[imIntensity[i,j]]=(i,j)
 	pixelSamples=[]
-	while len(pixelSamples)<numSamples:
-		i=random.randint(0,imSize-1)
-		pixelSamples.append(i)
-#		x.append(i/imIntensity.shape[0])
-#		y.append(i%imIntensity.shape[0])
-
-#	plt.imshow(imIntensity,cmap=cm.Greys_r)
-#	plt.plot(x,y,'r.')
-#	plt.imshow(imIntensity)
-#	plt.show()
+	if samplingMethod=="random":
+		while len(pixelSamples)<numSamples:
+			i=random.randint(0,imSize-1)
+			pixelSamples.append(i)
+			x.append(i/imIntensity.shape[0])
+			y.append(i%imIntensity.shape[0])
+	elif samplingMethod=="intensity":
+		for i in intensityDict:
+			x.append(intensityDict[i][1])
+			y.append(intensityDict[i][0])
+			pixelSamples.append(intensityDict[i][0]+intensityDict[i][1]*imIntensity.shape[0])
+	elif samplingMethod=="location":
+		increment=imIntensity.shape[0]*imIntensity.shape[1]/numSamples
+		for i in range(0,numSamples):
+			x.append(i*increment/imIntensity.shape[0])
+			y.append((i*increment)%imIntensity.shape[0])
+			pixelSamples.append(i*increment)
+	if __name__=="__main__":
+		plt.imshow(imIntensity,cmap=cm.Greys_r)
+		plt.plot(x,y,'r.')
+		plt.figure()
 	return pixelSamples
 
 #generates a plot of pixel value, z against the function g(z)
@@ -167,9 +164,11 @@ def plotZandG(z,g,color):
 
 
 if __name__=="__main__":
-	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','StLouisArch.txt',100)
-	#zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
-	l=1
+#	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','StLouisArch.txt',100)
+#	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','Trees.txt',100)
+	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
+	l = smoothness(meanNoiseValue,imHeight,imWidth)
+#	l=1
 	gRed,eRed=rfsolve(zRed,B,l,w,16)
 	gGreen,eGreen=rfsolve(zGreen,B,l,w,16)
 	gBlue,eBlue=rfsolve(zBlue,B,l,w,16)

@@ -22,8 +22,14 @@ h1 {
 h2 {
 	text-align:center;
 }
+.radiance {
+	width:500px;
+}
 .graph {
 	width:250px;
+}
+.large_graph {
+	width:500px;
 }
 .photo {
 	width:100px;
@@ -34,6 +40,9 @@ h2 {
 	font-size: 200%;
 	text-align:center;
 }
+#radiance_div {
+	text-align:center;
+}
 </style>
 </head>
 <body>
@@ -41,6 +50,9 @@ h2 {
 		<h1> CSE 555 (Computational Photography) Project 1 </h1>
 		<h1> High-Dynamic Range Imaging and Tone Mapping </h1>
 		<h2> Mark Heimann & Jing Dao Chen 2/9/2015 </h2>
+		<p>
+		<a href="graphs/memorial_radiance.png"><img class="poster" src="graphs/memorial_radiance.png"/></a>
+		</p>
 		<p>
 		<h3> Overview </h3>
 		The aim of the project is to construct a high dynamic range radiance map from a series of photographs taken at different exposures.
@@ -74,6 +86,15 @@ h2 {
 		<a href="images/StLouisArchMultExpEV+4.09.JPG"><img class="photo" src="images/StLouisArchMultExpEV+4.09.JPG"/></a>
 		</p>
 		<p>
+		<h3>Results</h3>
+		<div id="radiance_div">
+		<a href="graphs/memorial_radiance.png"><img class="radiance" src="graphs/memorial_radiance.png"/></a>
+		<a href="graphs/arch_radiance.png"><img class="radiance" src="graphs/arch_radiance.png"/></a>
+		<a href="graphs/trees_radiance.png"><img class="radiance" src="graphs/trees_radiance.png"/></a>
+		<a href="graphs/canal_radiance.png"><img class="radiance" src="graphs/canal_radiance.png"/></a>
+		</div>
+		</p>
+		<p>
 		<h3> Calculation of 𝛌 parameter </h3>
 		The effect of the 𝛌 parameter on determining the smoothness of the response curve often varies from image to image.<br>
 		The following shows the effect of increasing 𝛌 from 1 to 1000, multiplying by 10 each time, for different data sets.<br><br>
@@ -95,11 +116,25 @@ h2 {
 		<br><br>Here we develop a robust method in the setting of the 𝛌 parameter to account for variation of image dimensions and image noise.<br><br>
 		<div class="equation"> 𝛌 = c × N × w × h</div>
 		<br><br><b>Stanford memorial church</b> ( 𝛌 = 33 )<br>
-		<a href="graphs/memorial_lambda_33.png"><img class="graph" src="graphs/memorial_lambda_33.png"/></a>
+		<a href="graphs/memorial_lambda_33.png"><img class="large_graph" src="graphs/memorial_lambda_33.png"/></a>
 		<br><br><b>St Louis Arch</b> ( 𝛌 = 136 )<br>
-		<a href="graphs/arch_lambda_136.png"><img class="graph" src="graphs/arch_lambda_136.png"/></a>
+		<a href="graphs/arch_lambda_136.png"><img class="large_graph" src="graphs/arch_lambda_136.png"/></a>
 		<br><br><b>Trees</b> ( 𝛌 = 168 )<br>
-		<a href="graphs/trees_lambda_168.png"><img class="graph" src="graphs/trees_lambda_168.png"/></a>
+		<a href="graphs/trees_lambda_168.png"><img class="large_graph" src="graphs/trees_lambda_168.png"/></a>
+		</p>
+		<p>
+		<h3> Sampling of pixels </h3>
+		The sampling of pixels to construct the response curve is another issue not fully explored in the paper.
+		Here we present 3 different methods of sampling pixels and the effect on the resulting response curve.
+		<br><br><b>Pick random samples:</b><br>
+		<a href="graphs/randomSamplingFigure.png"><img class="large_graph" src="graphs/randomSamplingFigure.png"/></a>
+		<a href="graphs/randomSamplingGraph.png"><img class="large_graph" src="graphs/randomSamplingGraph.png"/></a>
+		<br><br><b>Pick samples that are spaced evenly apart in terms of pixel location:</b><br>
+		<a href="graphs/locationSamplingFigure.png"><img class="large_graph" src="graphs/locationSamplingFigure.png"/></a>
+		<a href="graphs/locationSamplingGraph.png"><img class="large_graph" src="graphs/locationSamplingGraph.png"/></a>
+		<br><br><b>Pick samples that have unique intensity values:</b><br>
+		<a href="graphs/intensitySamplingFigure.png"><img class="large_graph" src="graphs/intensitySamplingFigure.png"/></a>
+		<a href="graphs/intensitySamplingGraph.png"><img class="large_graph" src="graphs/intensitySamplingGraph.png"/></a>
 		</p>
 		<p>
 		Procedure:<br>
