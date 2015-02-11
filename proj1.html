@@ -25,6 +25,9 @@ h2 {
 .graph {
 	width:250px;
 }
+.photo {
+	width:100px;
+}
 .equation {
 	font-style:italic;
 	font-family: serif;
@@ -40,7 +43,35 @@ h2 {
 		<h2> Mark Heimann & Jing Dao Chen 2/9/2015 </h2>
 		<p>
 		<h3> Overview </h3>
-		The aim of the project is to
+		The aim of the project is to construct a high dynamic range radiance map from a series of photographs taken at different exposures.
+		The technique used is an implementation of the paper Recovering High Dynamic Range Radiance Maps from Photographs. Paul E. Debevec and Jitendra Malik. SIGGRAPH 97.
+		Here we also explore methods to address problems in the original technique including calculation of the 𝛌 parameter and sampling of pixels.
+		</p>
+		<p>
+		<h3> Data sets </h3>
+		<b>Stanford memorial church</b>
+		(extracted from <a href="http://www.pauldebevec.com/Research/HDR/">http://www.pauldebevec.com/Research/HDR/)</a><br>
+		<a href="memorial/memorial0061.png"><img class="photo" src="memorial/memorial0061.png"/></a>
+		<a href="memorial/memorial0062.png"><img class="photo" src="memorial/memorial0062.png"/></a>
+		<a href="memorial/memorial0063.png"><img class="photo" src="memorial/memorial0063.png"/></a>
+		<a href="memorial/memorial0064.png"><img class="photo" src="memorial/memorial0064.png"/></a>
+		<a href="memorial/memorial0065.png"><img class="photo" src="memorial/memorial0065.png"/></a>
+		<a href="memorial/memorial0066.png"><img class="photo" src="memorial/memorial0066.png"/></a>
+		<a href="memorial/memorial0067.png"><img class="photo" src="memorial/memorial0067.png"/></a>
+		<a href="memorial/memorial0068.png"><img class="photo" src="memorial/memorial0068.png"/></a>
+		<a href="memorial/memorial0069.png"><img class="photo" src="memorial/memorial0069.png"/></a>
+		<a href="memorial/memorial0071.png"><img class="photo" src="memorial/memorial0071.png"/></a>
+		<a href="memorial/memorial0072.png"><img class="photo" src="memorial/memorial0072.png"/></a>
+		<a href="memorial/memorial0073.png"><img class="photo" src="memorial/memorial0073.png"/></a>
+		<a href="memorial/memorial0074.png"><img class="photo" src="memorial/memorial0074.png"/></a>
+		<a href="memorial/memorial0075.png"><img class="photo" src="memorial/memorial0075.png"/></a>
+		<a href="memorial/memorial0076.png"><img class="photo" src="memorial/memorial0076.png"/></a>
+		<br><b>St Louis Arch</b>
+		(extracted from <a href="http://commons.wikimedia.org/wiki/File:StLouisArchMultExpEV%2B1.51.JPG">http://commons.wikimedia.org/wiki/File:StLouisArchMultExpEV%2B1.51.JPG)</a><br>
+		<a href="images/StLouisArchMultExpEV-4.72.JPG"><img class="photo" src="images/StLouisArchMultExpEV-4.72.JPG"/></a>
+		<a href="images/StLouisArchMultExpEV-1.82.JPG"><img class="photo" src="images/StLouisArchMultExpEV-1.82.JPG"/></a>
+		<a href="images/StLouisArchMultExpEV+1.18.JPG"><img class="photo" src="images/StLouisArchMultExpEV+1.18.JPG"/></a>
+		<a href="images/StLouisArchMultExpEV+4.09.JPG"><img class="photo" src="images/StLouisArchMultExpEV+4.09.JPG"/></a>
 		</p>
 		<p>
 		<h3> Calculation of 𝛌 parameter </h3>
