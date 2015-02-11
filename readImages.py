@@ -113,13 +113,43 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth
 
 def getSamplingDomain(imIntensity,numSamples,imSize):
-#	plt.imshow(imIntensity,cmap=cm.Greys_r)
-#	plt.imshow(imIntensity)
-#	plt.show()
+#	imGradient = np.zeros((imIntensity.shape[0]-1,imIntensity.shape[1]-1))
+#	for i in range(0,imIntensity.shape[0]-1):
+#		for j in range(0,imIntensity.shape[1]-1):
+#			imGradient[i,j]=(imIntensity[i,j+1]-imIntensity[i,j])**2+(imIntensity[i+1,j]-imIntensity[i,j])**2
+#	x=[]
+#	y=[]
+#	intensityDict={}
+#	minIntensity=np.min(imIntensity)
+#	maxIntensity=np.max(imIntensity)
+#	for i in range(0,imIntensity.shape[0]):
+#		for j in range(0,imIntensity.shape[1]):
+#			intensityDict[imIntensity[i,j]]=(i,j)
+#	print minIntensity,maxIntensity,len(intensityDict)
+#	sortedIntensity=sorted(intensityDict)
+#	pixelSamples=set()
+#	pixelSamples.add(0)
+#	for i in range(0,numSamples):
+#		intensityToFind=minIntensity+(maxIntensity-minIntensity)/numSamples*i
+#		print intensityToFind
+	
+#	pixelSamples=[]
+#	for i in intensityDict:
+#		x.append(intensityDict[i][1])
+#		y.append(intensityDict[i][0])
+#		pixelSamples.append(intensityDict[i][0]+intensityDict[i][1]*imIntensity.shape[0])
+
 	pixelSamples=[]
 	while len(pixelSamples)<numSamples:
 		i=random.randint(0,imSize-1)
 		pixelSamples.append(i)
+#		x.append(i/imIntensity.shape[0])
+#		y.append(i%imIntensity.shape[0])
+
+#	plt.imshow(imIntensity,cmap=cm.Greys_r)
+#	plt.plot(x,y,'r.')
+#	plt.imshow(imIntensity)
+#	plt.show()
 	return pixelSamples
 
 #generates a plot of pixel value, z against the function g(z)
@@ -137,13 +167,13 @@ def plotZandG(z,g,color):
 
 
 if __name__=="__main__":
-	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
-#	l=1
-#	gRed,eRed=rfsolve(zRed,B,l,w)
-#	gGreen,eGreen=rfsolve(zGreen,B,l,w)
-#	gBlue,eBlue=rfsolve(zBlue,B,l,w)
-#	plotZandG(zRed,gRed,'rx')
-#	plotZandG(zGreen,gGreen,'gx')
-#	plotZandG(zBlue,gBlue,'bx')
-#	plt.axis([-10,5,0,260])
-#	plt.show()
+	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('images','StLouisArch.txt',100)
+	l=1
+	gRed,eRed=rfsolve(zRed,B,l,w,16)
+	gGreen,eGreen=rfsolve(zGreen,B,l,w,16)
+	gBlue,eBlue=rfsolve(zBlue,B,l,w,16)
+	plotZandG(zRed,gRed,'rx')
+	plotZandG(zGreen,gGreen,'gx')
+	plotZandG(zBlue,gBlue,'bx')
+	plt.axis([-10,5,0,260])
+	plt.show()
