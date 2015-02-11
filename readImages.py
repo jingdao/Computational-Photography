@@ -8,6 +8,13 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.colors
 from rfsolver import rfsolve
+from estimateNoise import *
+
+numNoiseSamples = 50 #how many samples to take from each RGB channel of each image to estimate noise
+n = 256 #number of possible RGB values
+Zmin = 0 #minimum possible RGB value
+Zmax = 255 #maximum possible RGB value
+Zmid = (Zmin+Zmax)/2 #halfway between min and max possible values
 
 #returns red,green,blue pixel values from images files at different exposure times
 #also generates the ln(delta_t) array and the weight array
@@ -32,15 +39,32 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	imWidth=0
 	imHeight=0
 	pixelSamples=set()
+	
+	#noise values of all channels of all images
+	noiseValues = []
+	
+	#for each image in the file
 	for s in f:
 		sArray=s.split(' ')
 		imFile=sArray[0].replace('.ppm','.png')
 		exposureTime=math.log(1/float(sArray[1]))
 		B.append(exposureTime)
 		imArr=ndimage.imread(dirName+'/'+imFile)
+		
+		#get channels of each image
 		imRed=imArr[:,:,0]
 		imGreen=imArr[:,:,1]
 		imBlue=imArr[:,:,2]
+		
+		#estimate noisiness of the channel
+		meanRedNoise = estimateNoise(imRed,numNoiseSamples)
+		meanGreenNoise = estimateNoise(imGreen,numNoiseSamples)
+		meanBlueNoise = estimateNoise(imBlue,numNoiseSamples)
+		
+		noiseValues.append(meanRedNoise)
+		noiseValues.append(meanGreenNoise)
+		noiseValues.append(meanBlueNoise)
+		
 		if len(pixelSamples)==0:
 			imWidth=imRed.shape[1]
 			imHeight=imRed.shape[0]
@@ -62,19 +86,25 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 		zBlue.append(imBlue1D)
 		numImages+=1
 		numPixels+=numSamples
+		
 	f.close()
-	n = 256
+	
 	B=np.array(B)
 	zRed=np.transpose(np.array(zRed))
 	zGreen=np.transpose(np.array(zGreen))
 	zBlue=np.transpose(np.array(zBlue))
 	finalRed=np.transpose(np.array(finalRed))
 	finalGreen=np.transpose(np.array(finalGreen))
-	finalBlue=np.transpose(np.array(finalBlue))
+	finalBlue=np.transpose(np.array(finalBlue
+	
+	#calculate average noise value across all images and all channels
+	#use to see how large we want smoothness parameter lambda to be
+	#(idea: more noise: want more emphasis on smoothness)
+	meanNoiseValue = sum(noiseValues)/float(len(noiseValues))
+	print "mean noise value in our set of images: ", meanNoiseValue
+	
+	#calculate weights
 	w=np.ones((n,1))
-	Zmin = 0
-	Zmax = 255
-	Zmid = (Zmin+Zmax)/2
 	for i in range(0,n):
 		if i<=Zmid:
 			w[i]=i-Zmin

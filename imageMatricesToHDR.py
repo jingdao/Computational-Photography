@@ -11,11 +11,11 @@ from constructHDRmap import *
 from rfsolver import *
 
 #minimum, maximum RGB color values
-Zmin = 0
-Zmax = 255
-Zmid = (Zmax + Zmin)/2
+#Zmin = 0
+#Zmax = 255
+#Zmid = (Zmax + Zmin)/2
 
-n = 256
+#n = 256
 l = 100.0 #smoothness
 
 
@@ -25,8 +25,14 @@ numImagesToUse = 8
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
 	scaledRed = scaleHDR(mapRed, 10**-3)
+	plt.imshow(scaledRed)
+	plt.figure()
 	scaledGreen = scaleHDR(mapGreen,10**-3)
+	plt.imshow(scaledGreen)
+	plt.figure()
 	scaledBlue = scaleHDR(mapBlue,10**-3)
+	plt.imshow(scaledBlue)
+	plt.figure()
 	combinedMap = np.dstack([scaledRed,scaledGreen,scaledBlue])
 	print "showing image: "
 	plt.imshow(combinedMap)
@@ -47,6 +53,15 @@ def scaleHDR(raw_map, scale):
 	print "min value in scaled map: ", np.min(scaledMap)
 	print "max value in scaled map: ", np.max(scaledMap)
 	return scaledMap
+	
+#set lambda, the smoothness parameter, automatically based on how much noise there is
+#which we estimate by the variance in pixel radiances in our sample
+
+#pixelSample is an array of pixels where the i-th entry is the radiance of pixel i
+def smoothness(pixelSample):
+	
+	smoothness = 100.0
+	return smoothness
 	
 #run the program
 if __name__=="__main__":
