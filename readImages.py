@@ -95,13 +95,13 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	zBlue=np.transpose(np.array(zBlue))
 	finalRed=np.transpose(np.array(finalRed))
 	finalGreen=np.transpose(np.array(finalGreen))
-	finalBlue=np.transpose(np.array(finalBlue
+	finalBlue=np.transpose(np.array(finalBlue))
 	
 	#calculate average noise value across all images and all channels
 	#use to see how large we want smoothness parameter lambda to be
 	#(idea: more noise: want more emphasis on smoothness)
 	meanNoiseValue = sum(noiseValues)/float(len(noiseValues))
-	print "mean noise value in our set of images: ", meanNoiseValue
+	print "mean sum of squared noise value in our set of images: ", meanNoiseValue
 	
 	#calculate weights
 	w=np.ones((n,1))

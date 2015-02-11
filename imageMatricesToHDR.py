@@ -10,12 +10,6 @@ from readImages import *
 from constructHDRmap import *
 from rfsolver import *
 
-#minimum, maximum RGB color values
-#Zmin = 0
-#Zmax = 255
-#Zmid = (Zmax + Zmin)/2
-
-#n = 256
 l = 100.0 #smoothness
 
 
