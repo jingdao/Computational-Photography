@@ -11,6 +11,8 @@ from constructHDRmap import *
 from rfsolver import *
 
 l = 100.0 #smoothness
+defaultImageHeight = 1000
+defaultImageWidth = 1000
 
 
 numSamples = 100 #sample numSamples random pixels to calculate response function
@@ -52,9 +54,19 @@ def scaleHDR(raw_map, scale):
 #which we estimate by the variance in pixel radiances in our sample
 
 #pixelSample is an array of pixels where the i-th entry is the radiance of pixel i
-def smoothness(pixelSample):
+def smoothness(meanNoiseValue,imageHeight,imageWidth):
+	#penalize larger images as being more noisy
+	#a) because our estimate of noise probably under corrects (if the image is larger, the pixels values
+	#probably won't change as quickly so neighboring pixels are more likely to be similar in value)
+	#b) because larger images tend to be noisier... 
+	noiseEstimate = meanNoiseValue * (imageHeight/float(defaultImageHeight)) * (imageWidth/float(defaultImageWidth))
 	
-	smoothness = 100.0
+	#function converting noise estimate to a smoothness parameter
+	#could do linear regression or something to get exact parameters, but that would require
+	#mathematically evaluating how good your image is for a given smoothness parameter
+	#so we just estimate it roughly
+	smoothness = 0.1*noiseEstimate
+	print("We estimate the noise of these images to be %f.  Setting lamdba to be %f" % (noiseEstimate, smoothness))
 	return smoothness
 	
 #run the program
@@ -65,9 +77,10 @@ if __name__=="__main__":
 	
 	#height is number of rows, width is number of columns
 	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
-	imageGreen, imageBlue,numRowsInImage,numColsInImage \
+	imageGreen, imageBlue,numRowsInImage,numColsInImage, meanNoiseValue \
 	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
 	print "got pixel arrays"
+	l = smoothness(meanNoiseValue,numRowsInImage,numColsInImage)
 	
 	
 	rfRed_sample,hdrMapRed_sample = rfsolve(sampleRed,exposures,l,weights,numImagesToUse)

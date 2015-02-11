@@ -10,7 +10,7 @@ import matplotlib.colors
 from rfsolver import rfsolve
 from estimateNoise import *
 
-numNoiseSamples = 50 #how many samples to take from each RGB channel of each image to estimate noise
+numNoiseSamples = 100 #how many samples to take from each RGB channel of each image to estimate noise
 n = 256 #number of possible RGB values
 Zmin = 0 #minimum possible RGB value
 Zmax = 255 #maximum possible RGB value
@@ -110,7 +110,7 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			w[i]=i-Zmin
 		else:
 			w[i]=Zmax-i
-	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth
+	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue
 
 def getSamplingDomain(imIntensity,numSamples,imSize):
 #	imGradient = np.zeros((imIntensity.shape[0]-1,imIntensity.shape[1]-1))
@@ -167,7 +167,8 @@ def plotZandG(z,g,color):
 
 
 if __name__=="__main__":
-	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('images','StLouisArch.txt',100)
+	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','StLouisArch.txt',100)
+	#zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
 	l=1
 	gRed,eRed=rfsolve(zRed,B,l,w,16)
 	gGreen,eGreen=rfsolve(zGreen,B,l,w,16)

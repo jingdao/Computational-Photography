@@ -24,7 +24,7 @@ def estimateNoise(imageChannelMatrix, numSamples):
 		
 		pixelVal = int(imageChannelMatrix[randomRow, randomCol])
 		sum_NeighborSquaredDifferences = 0
-		for i in range(randomRow - 1, randomCol + 2):
+		for i in range(randomRow - 1, randomRow + 2):
 			for j in range(randomCol - 1, randomCol + 2):
 				if i != 0 or j != 0: #we're not comparing our pixel to itself
 					#append squared difference of the pixel's color with that of its neighbor
