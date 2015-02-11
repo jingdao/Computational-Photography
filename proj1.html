@@ -22,6 +22,15 @@ h1 {
 h2 {
 	text-align:center;
 }
+.graph {
+	width:250px;
+}
+.equation {
+	font-style:italic;
+	font-family: serif;
+	font-size: 200%;
+	text-align:center;
+}
 </style>
 </head>
 <body>
@@ -32,6 +41,34 @@ h2 {
 		<p>
 		<h3> Overview </h3>
 		The aim of the project is to
+		</p>
+		<p>
+		<h3> Calculation of 𝛌 parameter </h3>
+		The effect of the 𝛌 parameter on determining the smoothness of the response curve often varies from image to image.<br>
+		The following shows the effect of increasing 𝛌 from 1 to 1000, multiplying by 10 each time, for different data sets.<br><br>
+		<b>Stanford memorial church</b><br>
+		<a href="graphs/memorial_lambda_1.png"><img class="graph" src="graphs/memorial_lambda_1.png"/></a>
+		<a href="graphs/memorial_lambda_10.png"><img class="graph" src="graphs/memorial_lambda_10.png"/></a>
+		<a href="graphs/memorial_lambda_100.png"><img class="graph" src="graphs/memorial_lambda_100.png"/></a>
+		<a href="graphs/memorial_lambda_1000.png"><img class="graph" src="graphs/memorial_lambda_1000.png"/></a>
+		<br><br><b>St Louis Arch</b><br>
+		<a href="graphs/arch_lambda_1.png"><img class="graph" src="graphs/arch_lambda_1.png"/></a>
+		<a href="graphs/arch_lambda_10.png"><img class="graph" src="graphs/arch_lambda_10.png"/></a>
+		<a href="graphs/arch_lambda_100.png"><img class="graph" src="graphs/arch_lambda_100.png"/></a>
+		<a href="graphs/arch_lambda_1000.png"><img class="graph" src="graphs/arch_lambda_1000.png"/></a>
+		<br><br><b>Trees</b><br>
+		<a href="graphs/trees_lambda_1.png"><img class="graph" src="graphs/trees_lambda_1.png"/></a>
+		<a href="graphs/trees_lambda_10.png"><img class="graph" src="graphs/trees_lambda_10.png"/></a>
+		<a href="graphs/trees_lambda_100.png"><img class="graph" src="graphs/trees_lambda_100.png"/></a>
+		<a href="graphs/trees_lambda_1000.png"><img class="graph" src="graphs/trees_lambda_1000.png"/></a>
+		<br><br>Here we develop a robust method in the setting of the 𝛌 parameter to account for variation of image dimensions and image noise.<br><br>
+		<div class="equation"> 𝛌 = c × N × w × h</div>
+		<br><br><b>Stanford memorial church</b> ( 𝛌 = 33 )<br>
+		<a href="graphs/memorial_lambda_33.png"><img class="graph" src="graphs/memorial_lambda_33.png"/></a>
+		<br><br><b>St Louis Arch</b> ( 𝛌 = 136 )<br>
+		<a href="graphs/arch_lambda_136.png"><img class="graph" src="graphs/arch_lambda_136.png"/></a>
+		<br><br><b>Trees</b> ( 𝛌 = 168 )<br>
+		<a href="graphs/trees_lambda_168.png"><img class="graph" src="graphs/trees_lambda_168.png"/></a>
 		</p>
 		<p>
 		Procedure:<br>
