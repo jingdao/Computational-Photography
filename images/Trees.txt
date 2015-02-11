@@ -1,0 +1,10 @@
+
+
+
+Trees_EV+3.jpg 0.125
+Trees_EV+2.jpg 0.25
+Trees_EV+1.jpg 0.5
+Trees_EV+0.jpg 1
+Trees_EV-1.jpg 2
+Trees_EV-2.jpg 4
+Trees_EV-3.jpg 8
