@@ -24,6 +24,18 @@ samplingMethod = "intensity" #which method to sample pixels for construction of 
 #dirName: directory containing the images
 #txtFile: text file stating the image file names and the exposure times
 #numSamples: number of pixels to sample from each image
+#returns the tuple (zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue)
+#zRed: red channel sampled pixel values with dimensions (numSamples,numImages)
+#zGreen: green channel sampled pixel values with dimensions (numSamples,numImages)
+#zBlue: blue channel sampled pixel values with dimensions (numSamples,numImages)
+#B: array of log of exposure time
+#w: array of weights
+#finalRed: red channel original pixel values with dimensions (numPixels,numImages)
+#finalGreen: green channel original pixel values with dimensions (numPixels,numImages)
+#finalBlue: blue channel original pixel values with dimensions (numPixels,numImages)
+#imHeight: height of image
+#imWidth: width of image
+#meanNoiseValue: mean noise value in image
 def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 	f=open(dirName+'/'+txtFile)
 	f.readline()
@@ -114,6 +126,11 @@ def getPixelArrayFromFiles(dirName,txtFile,numSamples):
 			w[i]=Zmax-i
 	return zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue
 
+#returns an array of sample locations for sampling pixels
+#imIntensity: intensity of each pixel in the each
+#numSamples: number of samples to take
+#imSize: number of pixels in the image
+#the method used is based on the variable 'samplingMethod'
 def getSamplingDomain(imIntensity,numSamples,imSize):
 	x=[]
 	y=[]
@@ -166,9 +183,7 @@ def plotZandG(z,g,color):
 
 if __name__=="__main__":
 	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','Canal.txt',100)
-#	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
 	l = smoothness(meanNoiseValue,imHeight,imWidth)
-#	l=1
 	gRed,eRed=rfsolve(zRed,B,l,w,16)
 	gGreen,eGreen=rfsolve(zGreen,B,l,w,16)
 	gBlue,eBlue=rfsolve(zBlue,B,l,w,16)

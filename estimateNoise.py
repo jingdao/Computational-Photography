@@ -1,3 +1,5 @@
+#Based on Debevec and Malik (SIGGRAPH 1997), 
+#"Recovering High Dynamic Range Radiance Maps from Photographs"
 from scipy import ndimage
 import numpy as np
 import math

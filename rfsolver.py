@@ -80,20 +80,15 @@ if __name__=='__main__':
 	[30,90,200],
 	[20,55,150],
 	])
-	#zmin=np.min(z)
-	#zmax=np.max(z)
-	#zmid=(zmin+zmax)/2
 	B=np.array([2,1.33,0.67,0,-0.67]);
 	l=1
 	zt=np.transpose(z)
-	#plt.plot(np.transpose(z).A1,np.concatenate((B,B,B)),'x')
 	plt.subplot(121)
 	plt.plot(zt[0].A1,B,'x',zt[1].A1,B,'+',zt[2].A1,B,'o')
 	plt.axis([0,300,-6,6])
 	plt.xlabel('pixel value')
 	plt.ylabel('log exposure')
 	plt.title('Observed pixel values')
-	#plt.show()
 		
 	test_output = rfsolve(zt,B,l,w,16)
 	g=np.mat(test_output[0]).A1
@@ -104,22 +99,15 @@ if __name__=='__main__':
 		for j in range(0,5):
 			y[i,j]=g[zt[i,j]]
 			yy[i,j]=lE[i]+B[j]
-	#print y
-	#print yy
 	yt=np.transpose(y)
 	yt=y
 	yyt=np.transpose(y)
 	plt.subplot(122)
-	#plt.plot(np.transpose(z).A1,np.mat(np.transpose(y)).A1,'x')
 	plt.plot(zt[0].A1,yt[0],'x',zt[1].A1,yt[1],'+',zt[2].A1,yt[2],'o')
 	plt.axis([0,300,-6,6])
 	plt.title('Response curve')
 	plt.xlabel('pixel value')
 	plt.ylabel('log exposure')
-	#plt.subplot(313)
-	#plt.plot(np.transpose(z).A1,np.mat(np.transpose(yy)).A1,'x')
-	#plt.plot(zt[0].A1,yyt[0],'x',zt[1].A1,yyt[1],'+',zt[2].A1,yyt[2],'o')
-	#plt.axis([0,300,-6,6])
 	plt.show()
 
 

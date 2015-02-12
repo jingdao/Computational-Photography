@@ -11,12 +11,12 @@ from constructHDRmap import *
 from rfsolver import *
 
 l = 100.0 #smoothness
-defaultImageHeight = 1000
-defaultImageWidth = 1000
+defaultImageHeight = 1000 #image height scaling factor used to compute lambda
+defaultImageWidth = 1000 #image width scaling factor used to compute lambda
 
 
 numSamples = 100 #sample numSamples random pixels to calculate response function
-numImagesToUse = 16
+numImagesToUse = 16 #number of images used to compute the final HDR image
 
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
@@ -86,8 +86,7 @@ if __name__=="__main__":
 	#height is number of rows, width is number of columns
 	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
 	imageGreen, imageBlue,numRowsInImage,numColsInImage, meanNoiseValue \
-	= getPixelArrayFromFiles('images','Canal.txt',numSamples)
-#	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
+	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
 	print "got pixel arrays"
 	l = smoothness(meanNoiseValue,numRowsInImage,numColsInImage)
 	

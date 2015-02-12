@@ -33,6 +33,7 @@ h2 {
 }
 .photo {
 	width:100px;
+	display:none;
 }
 .equation {
 	font-style:italic;
@@ -51,7 +52,7 @@ h2 {
 		<h1> High-Dynamic Range Imaging and Tone Mapping </h1>
 		<h2> Mark Heimann & Jing Dao Chen 2/9/2015 </h2>
 		<p>
-		<a href="graphs/canal_radiance.png"><img class="poster" src="graphs/canal_radiance.png"/></a>
+		<a href="graphs/memorial_false_radiance.png"><img class="poster" src="graphs/memorial_false_radiance.png"/></a>
 		</p>
 		<h3> Overview </h3>
 		<p>
@@ -102,6 +103,11 @@ h2 {
 		</p>
 		<p>
 		<h3>Results</h3>
+		The following figures show the main results of our method. For each data set, we create a color approximation
+		to the high dynamic range image and a false-color image. The colored radiance map is displayed by linearly mapping the
+		lower p% of the true dynamic range to the display range, where p varies depending on the data set. On the other hand, the
+		false-color image represents the radiance at each pixel where high intensities are highlighted red and low intensities are
+		highlighted blue (log values are used for clarity).
 		<div id="radiance_div">
 		<br><b>Stanford Memorial Church</b><br>
 		<a href="graphs/memorial_radiance.png"><img class="radiance" src="graphs/memorial_radiance.png"/></a>
@@ -162,6 +168,9 @@ h2 {
 		<a href="graphs/canal_lambda_10.png"><img class="graph" src="graphs/canal_lambda_10.png"/></a>
 		<a href="graphs/canal_lambda_100.png"><img class="graph" src="graphs/canal_lambda_100.png"/></a>
 		<a href="graphs/canal_lambda_1000.png"><img class="graph" src="graphs/canal_lambda_1000.png"/></a>
+		<p>
+		Clearly, each data set exhibits a different response to an increase of the λ parameter. Thus, there should be an advantage to using an adaptive λ instead of a constant parameter for different data sets. The following figures show the generated response curve based on our calculated optimum λ.
+		</p>
 		<br><br><b>Stanford memorial church</b> ( λ = 35 )<br>
 		<a href="graphs/memorial_lambda_35.png"><img class="large_graph" src="graphs/memorial_lambda_35.png"/></a>
 		<br><br><b>St Louis Arch</b> ( λ = 218 )<br>
@@ -209,7 +218,7 @@ h2 {
 		<a href="graphs/intensitySamplingGraph.png"><img class="large_graph" src="graphs/intensitySamplingGraph.png"/></a>
 		</p>
 		<p>
-		Challenges:<br>
+		<h3>Challenges:</h3>
 		<ul>
 			<li>MATLAB indexing rules made it difficult to translate into Python code.</li>
 			<li>Large image sizes cause the rendering of HDR images to be slow, which made debugging difficult. </li>
@@ -218,6 +227,14 @@ h2 {
 			<li>Verifying accuracy was challenging since a numerical benchmark was not provided in the paper.</li>
 			<li>It was difficult to display HDR images without actually implementing tone mapping techniques.</li>
 		</ul>
+		</p>
+		<p>
+		<h3> References </h3>
+		<a href="http://ict.debevec.org/~debevec/Research/HDR/debevec-siggraph97.pdf">http://ict.debevec.org/~debevec/Research/HDR/debevec-siggraph97.pdf</a>
+		</p>
+		<p>
+		<h3> Source Code </h3>
+		<a href="https://github.com/jingdao/Computational-Photography">https://github.com/jingdao/Computational-Photography</a>
 		</p>
 	</div>
 </body>
