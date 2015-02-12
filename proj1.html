@@ -23,7 +23,7 @@ h2 {
 	text-align:center;
 }
 .radiance {
-	width:500px;
+	height:500px;
 }
 .graph {
 	width:250px;
@@ -51,14 +51,14 @@ h2 {
 		<h1> High-Dynamic Range Imaging and Tone Mapping </h1>
 		<h2> Mark Heimann & Jing Dao Chen 2/9/2015 </h2>
 		<p>
-		<a href="graphs/memorial_radiance.png"><img class="poster" src="graphs/memorial_radiance.png"/></a>
+		<a href="graphs/canal_radiance.png"><img class="poster" src="graphs/canal_radiance.png"/></a>
 		</p>
 		<h3> Overview </h3>
 		<p>
 			Images with high dynamic range, ranging from extreme brights to dark darks, are as many photographers know extremely difficult to photograph well.  The trouble is that digital imaging techniques cannot capture the several orders of magnitude difference in radiance well, so the raw photographs may not actually represent the relative brightness in the scene perfectly.  The paper "Recovering High Dynamic Range Radiance Maps from Photographs" (Paul E. Debevec and Jitendra Malik. SIGGRAPH 97) seeks use a series of photographs taken at different exposures to recover the response curve of the film, a nonlinear mapping that governs how radiance values in the scene correspond to pixel values in the image.  This response curve can be used to construct a high dynamic range radiance map, which can be used to render the image in a more limited dynamic range setting that can be displayed well digitally.
 		</p>
 		<p>
-		In this project, we implement the method in Debevec and Malik's paper.  To actually calculate the response function, we translate the authors' MATLAB code into NumPy, and we complete the rest of the project in NumPy.  Furthermore, we explore methods to address limitations of their technique, in particular their need for someone with image processing domain knowledge to take the effort to choose certain inputs and parameters manually.  For example, in the original paper, the authors manually set the parameter 훌 that regularized their response curve, governing the tradeoff between matching the image data and being smooth (robust to noise).  They also calculated their response curve based on a sample of hand-chosen pixels instead of all the pixels in all their images to save computation time.  The authors give only some suggestions for heuristics for choosing pixels, and they only say that 훌 should be determined based on how much noise is expected in the pictures, without giving further guidance.  We present and discuss methods for automatically setting 훌 and choosing pixels; in our implementation, all a user needs to do is provide images and run the algorithm without setting any of its hyperparameters.  
+		In this project, we implement the method in Debevec and Malik's paper.  To actually calculate the response function, we translate the authors' MATLAB code into NumPy, and we complete the rest of the project in NumPy.  Furthermore, we explore methods to address limitations of their technique, in particular their need for someone with image processing domain knowledge to take the effort to choose certain inputs and parameters manually.  For example, in the original paper, the authors manually set the parameter λ that regularized their response curve, governing the tradeoff between matching the image data and being smooth (robust to noise).  They also calculated their response curve based on a sample of hand-chosen pixels instead of all the pixels in all their images to save computation time.  The authors give only some suggestions for heuristics for choosing pixels, and they only say that λ should be determined based on how much noise is expected in the pictures, without giving further guidance.  We present and discuss methods for automatically setting λ and choosing pixels; in our implementation, all a user needs to do is provide images and run the algorithm without setting any of its hyperparameters.  
 		</p>
 		<p>
 		<h3> Data sets </h3>
@@ -85,19 +85,41 @@ h2 {
 		<a href="images/StLouisArchMultExpEV-1.82.JPG"><img class="photo" src="images/StLouisArchMultExpEV-1.82.JPG"/></a>
 		<a href="images/StLouisArchMultExpEV+1.18.JPG"><img class="photo" src="images/StLouisArchMultExpEV+1.18.JPG"/></a>
 		<a href="images/StLouisArchMultExpEV+4.09.JPG"><img class="photo" src="images/StLouisArchMultExpEV+4.09.JPG"/></a>
+		<br><b>Trees</b>
+		(extracted from <a href="https://www.flickr.com/photos/webnelly/sets/72157622319232581/">https://www.flickr.com/photos/webnelly/sets/72157622319232581/)</a><br>
+		<a href="images/Trees_EV+3.jpg"><img class="photo" src="images/Trees_EV+3.jpg"/></a>
+		<a href="images/Trees_EV+2.jpg"><img class="photo" src="images/Trees_EV+2.jpg"/></a>
+		<a href="images/Trees_EV+1.jpg"><img class="photo" src="images/Trees_EV+1.jpg"/></a>
+		<a href="images/Trees_EV+0.jpg"><img class="photo" src="images/Trees_EV+0.jpg"/></a>
+		<a href="images/Trees_EV-1.jpg"><img class="photo" src="images/Trees_EV-1.jpg"/></a>
+		<a href="images/Trees_EV-2.jpg"><img class="photo" src="images/Trees_EV-2.jpg"/></a>
+		<a href="images/Trees_EV-3.jpg"><img class="photo" src="images/Trees_EV-3.jpg"/></a>
+		<br><b>Grand Canal</b>
+		(extracted from <a href="http://www.hdrsoft.com/examples2.html">http://www.hdrsoft.com/examples2.html)</a><br>
+		<a href="images/grandcanal_over.jpg"><img class="photo" src="images/grandcanal_over.jpg"/></a>
+		<a href="images/grandcanal_mean.jpg"><img class="photo" src="images/grandcanal_mean.jpg"/></a>
+		<a href="images/grandcanal_under.jpg"><img class="photo" src="images/grandcanal_under.jpg"/></a>
 		</p>
 		<p>
 		<h3>Results</h3>
 		<div id="radiance_div">
+		<br><b>Stanford Memorial Church</b><br>
 		<a href="graphs/memorial_radiance.png"><img class="radiance" src="graphs/memorial_radiance.png"/></a>
+		<a href="graphs/memorial_false_radiance.png"><img class="radiance" src="graphs/memorial_false_radiance.png"/></a>
+		<br><b>St Louis Arch</b><br>
 		<a href="graphs/arch_radiance.png"><img class="radiance" src="graphs/arch_radiance.png"/></a>
+		<a href="graphs/arch_false_radiance.png"><img class="radiance" src="graphs/arch_false_radiance.png"/></a>
+		<br><b>Trees</b><br>
 		<a href="graphs/trees_radiance.png"><img class="radiance" src="graphs/trees_radiance.png"/></a>
+		<a href="graphs/trees_false_radiance.png"><img class="radiance" src="graphs/trees_false_radiance.png"/></a>
+		<br><b>Grand Canal</b><br>
 		<a href="graphs/canal_radiance.png"><img class="radiance" src="graphs/canal_radiance.png"/></a>
+		<a href="graphs/canal_false_radiance.png"><img class="radiance" src="graphs/canal_false_radiance.png"/></a>
 		</div>
 		</p>
 		<p>
-		<h3> Calculation of 훌 parameter </h3>
-		The paper's method chooses for the response function the curve that minimizes a specific loss function. This loss function contains a term multiplied by a constant 훌 that penalizes curves that are not smooth lines.  The larger 훌 is, the more a curve will be penalized for not being smooth, so larger values of 훌 generally lead to smoother response functions.  This comes at the expense of matching the pixel data perfectly, so it is useful when the pixel data is suspected to be very noisy.  
+		<h3> Calculation of λ parameter </h3>
+		The paper's method chooses for the response function the curve that minimizes a specific loss function. This loss function contains a term multiplied by a constant λ that penalizes curves that are not smooth lines.  The larger λ is, the more a curve will be penalized for not being smooth, so larger values of λ generally lead to smoother response functions.  This comes at the expense of matching the pixel data perfectly, so it is useful when the pixel data is suspected to be very noisy.  
 		</p>
 		<p>
 		Determining the amount of noise in an image is an academically interesting question in and of itself; to do it full justice is outside the scope of this project.  We used a very simple proxy for the noisiness of an image.  We randomly sampled a certain number of points (we found that 100 per RGB color channel per image usually worked pretty well and could be computed quickly).  For each pixel, we measured the average squared difference between the pixel's color value and that of its neighbors, and averaged this across our entire sample.  The reasoning is that "noise" is pixels that differ in color from their surroundings for no reason.
@@ -106,20 +128,20 @@ h2 {
 		Larger images tend to be noisier, but this method may underestimate the noise of a large image as, because all the objects in the image consist of more pixels, pixel color may not change as quickly from pixel to pixel.  Thus, we also penalize larger images.  We multiply our noise estimate by the height and width of the image in pixels, each divided by "default" image lengths (we found 1000 worked fairly well).
 		</p>  
 		<p>
-	    The actual value of 훌 can be computed as a function of our noise estimate.  We treated it as a linear function, multiplying our noise estimate by a constant (we found 0.5 worked fairly well).  
+	    The actual value of λ can be computed as a function of our noise estimate.  We treated it as a linear function, multiplying our noise estimate by a constant (we found 0.5 worked fairly well).  
 		</p>
 		<p>
-		The effect of the 훌 parameter on determining the smoothness of the response curve often varies from image to image.  Thus, it is important to have a method for setting 훌 that is responsive to the images themselves, as opposed to always using a fixed value for 훌.  
+		The effect of the λ parameter on determining the smoothness of the response curve often varies from image to image.  Thus, it is important to have a method for setting λ that is responsive to the images themselves, as opposed to always using a fixed value for λ.  
 		</p>
 		<p>
-		Mathematically speaking, we calculate our smoothness parameter 훌 as a function that accounts for variation of image dimensions and image noise:<br>
+		Mathematically speaking, we calculate our smoothness parameter λ as a function that accounts for variation of image dimensions and image noise:<br>
 		</p>
-		<div class="equation"> 훌 = c × N × w × h</div>
+		<div class="equation"> λ = c × N × w × h</div>
 		<p>
 		<br>
 		where c is a constant (which after experimentation we set to be 0.5), N is our noise estimate calculated as described above, w is the ratio of the image width in pixels to some default (which we chose to be 1000) and h is the ratio of the image height in pixels to some default (which we chose to be 1000 as well).  
 		</p>
-		The following figures show the effect of increasing 훌 from 1 to 1000, multiplying by 10 each time, for different data sets.<br><br>
+		The following figures show the effect of increasing λ from 1 to 1000, multiplying by 10 each time, for different data sets.<br><br>
 		<b>Stanford memorial church</b><br>
 		<a href="graphs/memorial_lambda_1.png"><img class="graph" src="graphs/memorial_lambda_1.png"/></a>
 		<a href="graphs/memorial_lambda_10.png"><img class="graph" src="graphs/memorial_lambda_10.png"/></a>
@@ -135,17 +157,47 @@ h2 {
 		<a href="graphs/trees_lambda_10.png"><img class="graph" src="graphs/trees_lambda_10.png"/></a>
 		<a href="graphs/trees_lambda_100.png"><img class="graph" src="graphs/trees_lambda_100.png"/></a>
 		<a href="graphs/trees_lambda_1000.png"><img class="graph" src="graphs/trees_lambda_1000.png"/></a>
-		<br><br><b>Stanford memorial church</b> ( 훌 = 33 )<br>
-		<a href="graphs/memorial_lambda_33.png"><img class="large_graph" src="graphs/memorial_lambda_33.png"/></a>
-		<br><br><b>St Louis Arch</b> ( 훌 = 136 )<br>
-		<a href="graphs/arch_lambda_136.png"><img class="large_graph" src="graphs/arch_lambda_136.png"/></a>
-		<br><br><b>Trees</b> ( 훌 = 168 )<br>
-		<a href="graphs/trees_lambda_168.png"><img class="large_graph" src="graphs/trees_lambda_168.png"/></a>
+		<br><br><b>Grand Canal</b><br>
+		<a href="graphs/canal_lambda_1.png"><img class="graph" src="graphs/canal_lambda_1.png"/></a>
+		<a href="graphs/canal_lambda_10.png"><img class="graph" src="graphs/canal_lambda_10.png"/></a>
+		<a href="graphs/canal_lambda_100.png"><img class="graph" src="graphs/canal_lambda_100.png"/></a>
+		<a href="graphs/canal_lambda_1000.png"><img class="graph" src="graphs/canal_lambda_1000.png"/></a>
+		<br><br><b>Stanford memorial church</b> ( λ = 35 )<br>
+		<a href="graphs/memorial_lambda_35.png"><img class="large_graph" src="graphs/memorial_lambda_35.png"/></a>
+		<br><br><b>St Louis Arch</b> ( λ = 167 )<br>
+		<a href="graphs/arch_lambda_167.png"><img class="large_graph" src="graphs/arch_lambda_167.png"/></a>
+		<br><br><b>Trees</b> ( λ = 189 )<br>
+		<a href="graphs/trees_lambda_189.png"><img class="large_graph" src="graphs/trees_lambda_189.png"/></a>
+		<br><br><b>Grand Canal</b> ( λ = 106 )<br>
+		<a href="graphs/canal_lambda_106.png"><img class="large_graph" src="graphs/canal_lambda_106.png"/></a>
 		</p>
 		<p>
 		<h3> Sampling of pixels </h3>
 		The sampling of pixels to construct the response curve is another issue not fully explored in the paper.
 		Here we present 3 different methods of sampling pixels and the effect on the resulting response curve.
+		</p>
+		<p>
+		The first technique used was to simply pick a set amount of samples from random points in the image.
+		This technique was straightforward to implement but the resulting curve was slightly scattered and noisy.
+		The introduction of randomization also meant that the generated response curve is not deterministic.
+		</p>
+		<p>
+		The second technique used was to pick samples that are spaced evenly apart in the image in terms of pixel location.
+		The image is subdivided into a number of subregions equal to the samples required and a single sample is taken from each subregion.
+		This technique results in a slightly better response curve compared to the first technique.
+		As long as the number of samples is large enough, it is likely that this technique is able to pick out pixels from both light and dark regions in the image.
+		</p>
+		<p>
+		The third technique used was to only pick samples that have unique intensity values.
+		The input RGB image is converted to HSV format and the intensity value is used to label each pixel.
+		The labelled pixels are then inserted into a set which guarantees uniqueness of intensity.
+		This results in a higher frequency of sampling in regions of the image of high variety and thus are of interest.
+		We decided to use this technique for our final algorithm since the generated response curve is also smoother and the different color channels are closer together.
+		</p>
+		<p>
+		The following figures show the location of samples selected by each technique and the generated response curve.
+		</p>
+		<p>
 		<br><br><b>Pick random samples:</b><br>
 		<a href="graphs/randomSamplingFigure.png"><img class="large_graph" src="graphs/randomSamplingFigure.png"/></a>
 		<a href="graphs/randomSamplingGraph.png"><img class="large_graph" src="graphs/randomSamplingGraph.png"/></a>
@@ -157,19 +209,14 @@ h2 {
 		<a href="graphs/intensitySamplingGraph.png"><img class="large_graph" src="graphs/intensitySamplingGraph.png"/></a>
 		</p>
 		<p>
-		Procedure:<br>
-		<ol>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ol>
-		</p>
-		<p>
 		Challenges:<br>
 		<ul>
-			<li></li>
-			<li></li>
-			<li></li>
+			<li>MATLAB indexing rules made it difficult to translate into Python code.</li>
+			<li>Large image sizes cause the rendering of HDR images to be slow, which made debugging difficult. </li>
+			<li>The input images are not perfectly aligned with each other.</li>
+			<li>Different data sets tend to have different responses to hyperparameters, so adjusting those parameters involved a lot of trial and error.</li>
+			<li>Verifying accuracy was challenging since a numerical benchmark was not provided in the paper.</li>
+			<li>It was difficult to display HDR images without actually implementing tone mapping techniques.</li>
 		</ul>
 		</p>
 	</div>

@@ -20,17 +20,25 @@ numImagesToUse = 16
 
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
-	scaledRed = scaleHDR(mapRed, 10**-3)
-	scaledGreen = scaleHDR(mapGreen,10**-3)
-	scaledBlue = scaleHDR(mapBlue,10**-3)
+	scaledRed = scaleHDR(mapRed, 0.5)
+	scaledGreen = scaleHDR(mapGreen,0.5)
+	scaledBlue = scaleHDR(mapBlue,0.5)
 	combinedMap = np.dstack([scaledRed,scaledGreen,scaledBlue])
 	print "showing image: "
+	plt.imshow(np.log(mapRed))
+	plt.title('False color radiance map')
+	plt.colorbar()
+	plt.figure()
+	plt.imshow(np.log(mapGreen))
+	plt.title('False color radiance map')
+	plt.colorbar()
+	plt.figure()
 	plt.imshow(np.log(mapBlue))
-	plt.title('False color radiance map of Stanford Memorial Church')
+	plt.title('False color radiance map')
 	plt.colorbar()
 	plt.figure()
 	plt.imshow(combinedMap)
-	plt.title('High dynamic range radiance map of Stanford Memorial Church')
+	plt.title('High dynamic range radiance map')
 	plt.show()
 	
 #scaling as per option (c) in the paper
@@ -78,8 +86,8 @@ if __name__=="__main__":
 	#height is number of rows, width is number of columns
 	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
 	imageGreen, imageBlue,numRowsInImage,numColsInImage, meanNoiseValue \
-	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
-#	= getPixelArrayFromFiles('images','StLouisArch.txt',numSamples)
+	= getPixelArrayFromFiles('images','Canal.txt',numSamples)
+#	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
 	print "got pixel arrays"
 	l = smoothness(meanNoiseValue,numRowsInImage,numColsInImage)
 	

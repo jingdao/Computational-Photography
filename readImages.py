@@ -16,7 +16,7 @@ n = 256 #number of possible RGB values
 Zmin = 0 #minimum possible RGB value
 Zmax = 255 #maximum possible RGB value
 Zmid = (Zmin+Zmax)/2 #halfway between min and max possible values
-samplingMethod = "intensity" #which method to sample pixels for construction of response curve
+samplingMethod = "random" #which method to sample pixels for construction of response curve
 
 #returns red,green,blue pixel values from images files at different exposure times
 #also generates the ln(delta_t) array and the weight array
@@ -165,7 +165,6 @@ def plotZandG(z,g,color):
 
 
 if __name__=="__main__":
-#	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','StLouisArch.txt',100)
 #	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('images','Trees.txt',100)
 	zRed,zGreen,zBlue,B,w,finalRed,finalGreen,finalBlue,imHeight,imWidth,meanNoiseValue = getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',100)
 	l = smoothness(meanNoiseValue,imHeight,imWidth)
