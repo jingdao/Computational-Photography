@@ -20,13 +20,13 @@ numImagesToUse = 8
 
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
-	scaledRed = scaleHDR(mapRed, 10**-3)
+	scaledRed = scaleHDR(mapRed, 1)#10**-3)
 	plt.imshow(scaledRed)
 	plt.figure()
-	scaledGreen = scaleHDR(mapGreen,10**-3)
+	scaledGreen = scaleHDR(mapGreen, 1)#10**-3)
 	plt.imshow(scaledGreen)
 	plt.figure()
-	scaledBlue = scaleHDR(mapBlue,10**-3)
+	scaledBlue = scaleHDR(mapBlue,1)#10**-3)
 	plt.imshow(scaledBlue)
 	plt.figure()
 	combinedMap = np.dstack([scaledRed,scaledGreen,scaledBlue])
@@ -78,7 +78,7 @@ if __name__=="__main__":
 	#height is number of rows, width is number of columns
 	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
 	imageGreen, imageBlue,numRowsInImage,numColsInImage, meanNoiseValue \
-	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
+	= getPixelArrayFromFiles('images','canal.txt',numSamples)
 	print "got pixel arrays"
 	l = smoothness(meanNoiseValue,numRowsInImage,numColsInImage)
 	

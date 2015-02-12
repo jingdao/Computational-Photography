@@ -53,11 +53,12 @@ h2 {
 		<p>
 		<a href="graphs/memorial_radiance.png"><img class="poster" src="graphs/memorial_radiance.png"/></a>
 		</p>
-		<p>
 		<h3> Overview </h3>
-		The aim of the project is to construct a high dynamic range radiance map from a series of photographs taken at different exposures.
-		The technique used is an implementation of the paper Recovering High Dynamic Range Radiance Maps from Photographs. Paul E. Debevec and Jitendra Malik. SIGGRAPH 97.
-		Here we also explore methods to address problems in the original technique including calculation of the 𝛌 parameter and sampling of pixels.
+		<p>
+			Images with high dynamic range, ranging from extreme brights to dark darks, are as many photographers know extremely difficult to photograph well.  The trouble is that digital imaging techniques cannot capture the several orders of magnitude difference in radiance well, so the raw photographs may not actually represent the relative brightness in the scene perfectly.  The paper "Recovering High Dynamic Range Radiance Maps from Photographs" (Paul E. Debevec and Jitendra Malik. SIGGRAPH 97) seeks use a series of photographs taken at different exposures to recover the response curve of the film, a nonlinear mapping that governs how radiance values in the scene correspond to pixel values in the image.  This response curve can be used to construct a high dynamic range radiance map, which can be used to render the image in a more limited dynamic range setting that can be displayed well digitally.
+		</p>
+		<p>
+		In this project, we implement the method in Debevec and Malik's paper.  To actually calculate the response function, we translate the authors' MATLAB code into NumPy, and we complete the rest of the project in NumPy.  Furthermore, we explore methods to address limitations of their technique, in particular their need for someone with image processing domain knowledge to take the effort to choose certain inputs and parameters manually.  For example, in the original paper, the authors manually set the parameter 훌 that regularized their response curve, governing the tradeoff between matching the image data and being smooth (robust to noise).  They also calculated their response curve based on a sample of hand-chosen pixels instead of all the pixels in all their images to save computation time.  The authors give only some suggestions for heuristics for choosing pixels, and they only say that 훌 should be determined based on how much noise is expected in the pictures, without giving further guidance.  We present and discuss methods for automatically setting 훌 and choosing pixels; in our implementation, all a user needs to do is provide images and run the algorithm without setting any of its hyperparameters.  
 		</p>
 		<p>
 		<h3> Data sets </h3>
@@ -95,9 +96,30 @@ h2 {
 		</div>
 		</p>
 		<p>
-		<h3> Calculation of 𝛌 parameter </h3>
-		The effect of the 𝛌 parameter on determining the smoothness of the response curve often varies from image to image.<br>
-		The following shows the effect of increasing 𝛌 from 1 to 1000, multiplying by 10 each time, for different data sets.<br><br>
+		<h3> Calculation of 훌 parameter </h3>
+		The paper's method chooses for the response function the curve that minimizes a specific loss function. This loss function contains a term multiplied by a constant 훌 that penalizes curves that are not smooth lines.  The larger 훌 is, the more a curve will be penalized for not being smooth, so larger values of 훌 generally lead to smoother response functions.  This comes at the expense of matching the pixel data perfectly, so it is useful when the pixel data is suspected to be very noisy.  
+		</p>
+		<p>
+		Determining the amount of noise in an image is an academically interesting question in and of itself; to do it full justice is outside the scope of this project.  We used a very simple proxy for the noisiness of an image.  We randomly sampled a certain number of points (we found that 100 per RGB color channel per image usually worked pretty well and could be computed quickly).  For each pixel, we measured the average squared difference between the pixel's color value and that of its neighbors, and averaged this across our entire sample.  The reasoning is that "noise" is pixels that differ in color from their surroundings for no reason.
+		</p>
+		<p>  
+		Larger images tend to be noisier, but this method may underestimate the noise of a large image as, because all the objects in the image consist of more pixels, pixel color may not change as quickly from pixel to pixel.  Thus, we also penalize larger images.  We multiply our noise estimate by the height and width of the image in pixels, each divided by "default" image lengths (we found 1000 worked fairly well).
+		</p>  
+		<p>
+	    The actual value of 훌 can be computed as a function of our noise estimate.  We treated it as a linear function, multiplying our noise estimate by a constant (we found 0.5 worked fairly well).  
+		</p>
+		<p>
+		The effect of the 훌 parameter on determining the smoothness of the response curve often varies from image to image.  Thus, it is important to have a method for setting 훌 that is responsive to the images themselves, as opposed to always using a fixed value for 훌.  
+		</p>
+		<p>
+		Mathematically speaking, we calculate our smoothness parameter 훌 as a function that accounts for variation of image dimensions and image noise:<br>
+		</p>
+		<div class="equation"> 훌 = c × N × w × h</div>
+		<p>
+		<br>
+		where c is a constant (which after experimentation we set to be 0.5), N is our noise estimate calculated as described above, w is the ratio of the image width in pixels to some default (which we chose to be 1000) and h is the ratio of the image height in pixels to some default (which we chose to be 1000 as well).  
+		</p>
+		The following figures show the effect of increasing 훌 from 1 to 1000, multiplying by 10 each time, for different data sets.<br><br>
 		<b>Stanford memorial church</b><br>
 		<a href="graphs/memorial_lambda_1.png"><img class="graph" src="graphs/memorial_lambda_1.png"/></a>
 		<a href="graphs/memorial_lambda_10.png"><img class="graph" src="graphs/memorial_lambda_10.png"/></a>
@@ -113,13 +135,11 @@ h2 {
 		<a href="graphs/trees_lambda_10.png"><img class="graph" src="graphs/trees_lambda_10.png"/></a>
 		<a href="graphs/trees_lambda_100.png"><img class="graph" src="graphs/trees_lambda_100.png"/></a>
 		<a href="graphs/trees_lambda_1000.png"><img class="graph" src="graphs/trees_lambda_1000.png"/></a>
-		<br><br>Here we develop a robust method in the setting of the 𝛌 parameter to account for variation of image dimensions and image noise.<br><br>
-		<div class="equation"> 𝛌 = c × N × w × h</div>
-		<br><br><b>Stanford memorial church</b> ( 𝛌 = 33 )<br>
+		<br><br><b>Stanford memorial church</b> ( 훌 = 33 )<br>
 		<a href="graphs/memorial_lambda_33.png"><img class="large_graph" src="graphs/memorial_lambda_33.png"/></a>
-		<br><br><b>St Louis Arch</b> ( 𝛌 = 136 )<br>
+		<br><br><b>St Louis Arch</b> ( 훌 = 136 )<br>
 		<a href="graphs/arch_lambda_136.png"><img class="large_graph" src="graphs/arch_lambda_136.png"/></a>
-		<br><br><b>Trees</b> ( 𝛌 = 168 )<br>
+		<br><br><b>Trees</b> ( 훌 = 168 )<br>
 		<a href="graphs/trees_lambda_168.png"><img class="large_graph" src="graphs/trees_lambda_168.png"/></a>
 		</p>
 		<p>
@@ -151,13 +171,6 @@ h2 {
 			<li></li>
 			<li></li>
 		</ul>
-		</p>
-		<p>
-		Calculation:<br><br>
-		<code>
-			distance to subject at minimum zoom, d1 = 0.65m<br> 
-			distance to subject at maximum zoom, d2 = 1.40m<br>
-		</code>
 		</p>
 	</div>
 </body>
