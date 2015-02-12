@@ -146,6 +146,7 @@ def getSamplingDomain(imIntensity,numSamples,imSize):
 	if __name__=="__main__":
 		plt.imshow(imIntensity,cmap=cm.Greys_r)
 		plt.plot(x,y,'r.')
+		plt.title('Sample Locations')
 		plt.figure()
 	return pixelSamples
 
@@ -176,4 +177,7 @@ if __name__=="__main__":
 	plotZandG(zGreen,gGreen,'gx')
 	plotZandG(zBlue,gBlue,'bx')
 	plt.axis([-10,5,0,260])
+	plt.xlabel('log exposure X')
+	plt.ylabel('pixel value Z')
+	plt.title('Response curve')
 	plt.show()

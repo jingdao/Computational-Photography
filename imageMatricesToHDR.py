@@ -16,22 +16,21 @@ defaultImageWidth = 1000
 
 
 numSamples = 100 #sample numSamples random pixels to calculate response function
-numImagesToUse = 8
+numImagesToUse = 16
 
 #display the HDR map with different options	
 def displayHDR(mapRed,mapGreen,mapBlue):	
-	scaledRed = scaleHDR(mapRed, 1)#10**-3)
-	plt.imshow(scaledRed)
-	plt.figure()
-	scaledGreen = scaleHDR(mapGreen, 1)#10**-3)
-	plt.imshow(scaledGreen)
-	plt.figure()
-	scaledBlue = scaleHDR(mapBlue,1)#10**-3)
-	plt.imshow(scaledBlue)
-	plt.figure()
+	scaledRed = scaleHDR(mapRed, 10**-3)
+	scaledGreen = scaleHDR(mapGreen,10**-3)
+	scaledBlue = scaleHDR(mapBlue,10**-3)
 	combinedMap = np.dstack([scaledRed,scaledGreen,scaledBlue])
 	print "showing image: "
+	plt.imshow(np.log(mapBlue))
+	plt.title('False color radiance map of Stanford Memorial Church')
+	plt.colorbar()
+	plt.figure()
 	plt.imshow(combinedMap)
+	plt.title('High dynamic range radiance map of Stanford Memorial Church')
 	plt.show()
 	
 #scaling as per option (c) in the paper
@@ -46,6 +45,7 @@ def scaleHDR(raw_map, scale):
 	scalingValue = Zmax/scaledMax
 	scaledMap = scalingValue * raw_map
 	scaledMap[scaledMap > Zmax] = Zmax
+	scaledMap=scaledMap.astype(np.uint8)
 	print "min value in scaled map: ", np.min(scaledMap)
 	print "max value in scaled map: ", np.max(scaledMap)
 	return scaledMap
@@ -65,7 +65,7 @@ def smoothness(meanNoiseValue,imageHeight,imageWidth):
 	#could do linear regression or something to get exact parameters, but that would require
 	#mathematically evaluating how good your image is for a given smoothness parameter
 	#so we just estimate it roughly
-	smoothness = 0.1*noiseEstimate
+	smoothness = 0.5*noiseEstimate
 	print("We estimate the noise of these images to be %f.  Setting lamdba to be %f" % (noiseEstimate, smoothness))
 	return smoothness
 	
@@ -78,7 +78,8 @@ if __name__=="__main__":
 	#height is number of rows, width is number of columns
 	sampleRed,sampleGreen,sampleBlue,exposures,weights, imageRed, \
 	imageGreen, imageBlue,numRowsInImage,numColsInImage, meanNoiseValue \
-	= getPixelArrayFromFiles('images','canal.txt',numSamples)
+	= getPixelArrayFromFiles('memorial','memorial.hdr_image_list.txt',numSamples)
+#	= getPixelArrayFromFiles('images','StLouisArch.txt',numSamples)
 	print "got pixel arrays"
 	l = smoothness(meanNoiseValue,numRowsInImage,numColsInImage)
 	
@@ -103,21 +104,21 @@ if __name__=="__main__":
 	
 	print "got last hdr map, displaying based on hdr map of images"
 	#end profiler
-	pr.disable()
-	s = StringIO.StringIO()
-	sortby = "cumtime"
-	ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-	ps.print_stats()
-	print s.getvalue()
+#	pr.disable()
+#	s = StringIO.StringIO()
+#	sortby = "cumtime"
+#	ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+#	ps.print_stats()
+#	print s.getvalue()
 	displayHDR(hdrMapRed_images,hdrMapGreen_images, hdrMapBlue_images)
-	print "size of response function for red channel: ", rfRed_sample.size
+#	print "size of response function for red channel: ", rfRed_sample.size
 	
 	#plot the response functions
-	x = np.zeros(rfRed_sample.size)
-	for i in range(0,x.size):
-		x[i] = i
-	plt.plot(x,rfRed_sample, "r-", x,rfGreen_sample, "g-", x,rfBlue_sample, "b-")
-	plt.show()
+#	x = np.zeros(rfRed_sample.size)
+#	for i in range(0,x.size):
+#		x[i] = i
+#	plt.plot(x,rfRed_sample, "r-", x,rfGreen_sample, "g-", x,rfBlue_sample, "b-")
+#	plt.show()
 
 
 
