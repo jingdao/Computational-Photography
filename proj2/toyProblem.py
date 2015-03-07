@@ -14,7 +14,12 @@ if __name__=="__main__":
 #	A=np.zeros((numEquations,numVariables))
 	A_indices=np.zeros(numIndices,dtype=np.int64)
 	b=np.zeros(numEquations)
-	
+
+	#calculate gradients
+	gx=imArr[:,1:imArr.shape[1]]-imArr[:,0:imArr.shape[1]-1]
+	gy=imArr[1:imArr.shape[0],:]-imArr[0:imArr.shape[0]-1,:]
+
+	#initialize constants	
 	e=0
 	s=imArr
 
@@ -64,5 +69,15 @@ if __name__=="__main__":
 #	print b
 #	print x
 
+	#Calculate the error
+	print 'Error: ',np.sum((imArr-x)**2)
+
+	plt.imshow(gx,cmap=cm.Greys_r)
+	plt.title('Gradient in x direction')
+	plt.figure()
+	plt.imshow(gy,cmap=cm.Greys_r)
+	plt.title('Gradient in y direction')
+	plt.figure()
 	plt.imshow(x,cmap=cm.Greys_r)
+	plt.title('Recovered image')
 	plt.show()
