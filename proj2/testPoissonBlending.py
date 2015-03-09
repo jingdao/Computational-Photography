@@ -3,18 +3,18 @@ import numpy as np
 import poissonBlending
 import matplotlib.pyplot as plt
 
-if __name__=="__main__":
-	src=ndimage.imread('samples/penguin_aligned.jpg')
-	tgt=ndimage.imread('samples/im2_small.JPG')
-	mask_img=ndimage.imread('samples/penguin_mask.jpg')
-	useMixedGradient = False
+def testPoissonBlend(srcFile,tgtFile,maskFile):
+	src=ndimage.imread(srcFile)
+	tgt=ndimage.imread(tgtFile)
+	mask_img=ndimage.imread(maskFile)
+
 
 	#get mask: specifices which pixels in the source image are the source region
 	#True if pixel in source image is in source region, False otherwise
-	mask=np.zeros(mask_img.shape,dtype=bool)
+	mask=np.zeros((mask_img.shape[0],mask_img.shape[1]),dtype=bool)
 	for i in range(mask_img.shape[0]):
 		for j in range(mask_img.shape[1]):
-			if mask_img[i,j]>0:
+			if np.sum(mask_img[i,j])>0:
 				mask[i,j]=True
 			else:
 				mask[i,j]=False
@@ -34,6 +34,10 @@ if __name__=="__main__":
 	tgt[:,:,1] = mask*vGreen + (1 - mask)*tgt[:,:,1]
 	tgt[:,:,2] = mask*vBlue + (1 - mask)*tgt[:,:,2]
 	
+	plt.figure()
 	plt.imshow(tgt)
 	plt.show()
 
+if __name__=="__main__":
+#	testPoissonBlend('samples/penguin_aligned.jpg','samples/im2_small.JPG','samples/penguin_mask.jpg')
+	testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg')
