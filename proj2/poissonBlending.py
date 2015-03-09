@@ -10,11 +10,11 @@ import scipy.sparse.linalg
 #target: image into which to place the source region
 #mask: specifies which part of the source image to place in the target image
 	#matrix: 1 if corresponding pixel is in region to be put in target, 0 otherwise
-
+#mixedGradient: boolean whether or not we want to use mixed gradients
 #alignSource.m says where in the target image to put the region from source image
 
 #TODO: separate into 3 color channels
-def poissonBlend(source, target, mask):
+def poissonBlend(source, target, mask, useMixedGradient):
 	#Step 1: select source region and place to put it in target image, align source and target image
 	#can manually do in Matlab for now
 	#TODO: do in Python
@@ -48,6 +48,10 @@ def poissonBlend(source, target, mask):
 		for j in range(0,sourceHeight): #row
 			if mask[j,i]: #this pixel is in the source region
 				originalPixelValue = source[j,i]
+				
+				#for mixed gradients
+				targetOriginal = target[j,i]
+				
 				#for each neighboring pixel in the source *that we haven't checked*
 				#don't check neighbors you've already checked 
 				#(e.g. comparing pixels [1,1] and [2,1] is same as comparing pixels [2,1] and [1,1])
@@ -62,12 +66,22 @@ def poissonBlend(source, target, mask):
 							Adata.append(1) #v_i
 						
 							neighbor = source[j+n,i+m]
+							
+							#for mixed gradients
+							targetNeighbor = target[j+n,i+m]
+							
 							ArowIndices.append(e)
 							AcolIndices.append((j+n)*sourceWidth + (i+m))
 							Adata.append(-1) #-v_j
 						
-							#note: make the solution be a float
-							b.append(float(neighbor) - originalPixelValue)
+							#solution is the gradient (default: assume it's the gradient in source image)
+							gradient = float(originalPixelValue) - neighbor #note: make the solution be a float
+							
+							if useMixedGradient: #now we also need to compute the gradient in the target image
+								targetGradient = float(targetOriginal) - targetNeighbor
+								if abs(targetGradient) > abs(gradient):
+									gradient = targetGradient #use the gradient with the larger magnitude
+							b.append(gradient)
 							e += 1
 						if m + n > 0 and not mask[j+n,i+m]:
 							ArowIndices.append(e) #the e-th equation
@@ -75,10 +89,22 @@ def poissonBlend(source, target, mask):
 							Adata.append(1) #v_i
 						
 							neighbor = source[j+n,i+m]
+							
+							#for mixed gradients
+							targetNeighbor = target[j+n,i+m]
 						
-							#target image pixel value is a constant with respect to x, what we're solving for
-							#note: make the solution be a float
-							b.append(float(neighbor) - originalPixelValue + target[(j+n),(i+m)])
+							#by default, assume the gradient is from the source image
+							gradient = float(originalPixelValue) - neighbor#note: make the solution be a float
+							
+							#but if we want mixed gradients, check to see whether gradient is larger in source or target
+							if useMixedGradient:
+								targetGradient = float(targetOriginal) - targetNeighbor
+								if abs(targetGradient) > abs(gradient):
+									gradient = targetGradient #use the gradient with the larger magnitude
+							
+							#target image pixel value is also a constant with respect to x, what we're solving for
+							#so it's part of the solution
+							b.append(gradient + target[(j+n),(i+m)])
 							e += 1
 						
 	#shape of the matrix is (number of equations) x (number of pixels in source/target image)
@@ -104,4 +130,4 @@ if __name__ == "__main__":
 	source = np.matrix('1 2 3; 4 5 6; 7 8 9')
 	target = np.matrix('3 1 8; 2 4 4; 7 9 5')
 	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')
-	poissonBlend(source, target, mask)
+	poissonBlend(source, target, mask, False)

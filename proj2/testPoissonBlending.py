@@ -7,6 +7,7 @@ if __name__=="__main__":
 	src=ndimage.imread('samples/penguin_aligned.jpg')
 	tgt=ndimage.imread('samples/im2_small.JPG')
 	mask_img=ndimage.imread('samples/penguin_mask.jpg')
+	useMixedGradient = False
 
 	#get mask: specifices which pixels in the source image are the source region
 	#True if pixel in source image is in source region, False otherwise
@@ -19,9 +20,9 @@ if __name__=="__main__":
 				mask[i,j]=False
 
 	#Calculate Poisson Blend in 3 color channels
-	vRed=poissonBlending.poissonBlend(src[:,:,0],tgt[:,:,0],mask)
-	vGreen=poissonBlending.poissonBlend(src[:,:,1],tgt[:,:,1],mask)
-	vBlue=poissonBlending.poissonBlend(src[:,:,2],tgt[:,:,2],mask)
+	vRed=poissonBlending.poissonBlend(src[:,:,0],tgt[:,:,0],mask,useMixedGradient)
+	vGreen=poissonBlending.poissonBlend(src[:,:,1],tgt[:,:,1],mask,useMixedGradient)
+	vBlue=poissonBlending.poissonBlend(src[:,:,2],tgt[:,:,2],mask,useMixedGradient)
 	
 	#round possible floating point values to ints
 	vRed = np.array(vRed,dtype=np.uint8)
