@@ -3,11 +3,10 @@ import numpy as np
 import poissonBlending
 import matplotlib.pyplot as plt
 
-def testPoissonBlend(srcFile,tgtFile,maskFile):
+def testPoissonBlend(srcFile,tgtFile,maskFile,useMixedGradient):
 	src=ndimage.imread(srcFile)
 	tgt=ndimage.imread(tgtFile)
 	mask_img=ndimage.imread(maskFile)
-
 
 	#get mask: specifices which pixels in the source image are the source region
 	#True if pixel in source image is in source region, False otherwise
@@ -39,5 +38,6 @@ def testPoissonBlend(srcFile,tgtFile,maskFile):
 	plt.show()
 
 if __name__=="__main__":
-#	testPoissonBlend('samples/penguin_aligned.jpg','samples/im2_small.JPG','samples/penguin_mask.jpg')
-	testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg')
+	useMixedGradient = True
+	testPoissonBlend('samples/penguin_aligned.jpg','samples/im2_small.JPG','samples/penguin_mask.jpg',useMixedGradient)
+	#testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg',useMixedGradient)
