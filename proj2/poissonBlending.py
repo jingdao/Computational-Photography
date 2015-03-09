@@ -95,10 +95,13 @@ def poissonBlend(source, target, mask):
 	print("A, the equations: ")
 	print A
 	print("b, the solutions: ")
-	print b		
+	print b	
+	
+	#return the solution: pixels of x corresponding to the source region should now be blended
+	return x	
 
 if __name__ == "__main__":
-	source = np.matrix('1 2; 3 4')
-	target = np.matrix('3 1; 3 2')
-	mask = np.matrix('1 0; 0 0')
+	source = np.matrix('1 2 3; 4 5 6; 7 8 9')
+	target = np.matrix('3 1 8; 2 4 4; 7 9 5')
+	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')
 	poissonBlend(source, target, mask)

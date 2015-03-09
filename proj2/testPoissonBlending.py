@@ -27,9 +27,12 @@ if __name__=="__main__":
 	vRed = np.array(vRed,dtype=np.uint8)
 	vGreen = np.array(vGreen,dtype=np.uint8)
 	vBlue = np.array(vBlue,dtype=np.uint8)
-
-	#display image
-	finalImage=np.dstack([vRed,vGreen,vBlue])
-	plt.imshow(finalImage)
+	
+	#put blended values of source region back into target region
+	tgt[:,:,0] = mask*vRed + (1 - mask)*tgt[:,:,0]
+	tgt[:,:,1] = mask*vGreen + (1 - mask)*tgt[:,:,1]
+	tgt[:,:,2] = mask*vBlue + (1 - mask)*tgt[:,:,2]
+	
+	plt.imshow(tgt)
 	plt.show()
 
