@@ -35,9 +35,10 @@ def testPoissonBlend(srcFile,tgtFile,maskFile,useMixedGradient):
 	
 	plt.figure()
 	plt.imshow(tgt)
-	plt.show()
 
 if __name__=="__main__":
-	useMixedGradient = True
-	testPoissonBlend('samples/penguin_aligned.jpg','samples/im2_small.JPG','samples/penguin_mask.jpg',useMixedGradient)
-	#testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg',useMixedGradient)
+	useMixedGradient = False
+#	testPoissonBlend('samples/penguin_aligned.jpg','samples/im2_small.JPG','samples/penguin_mask.jpg',useMixedGradient)
+#	testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg',useMixedGradient)
+	testPoissonBlend('samples/plane_src.jpg','samples/plane_tgt.jpg','samples/plane_mask.jpg',useMixedGradient)
+	plt.show()
