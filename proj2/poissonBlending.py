@@ -4,23 +4,24 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.sparse.linalg
 
+#EXPLORE: assign weighting factor for gradient constraint vs value constraint
+#(instead of just 1s and -1's: equal weight)
+
+#EXPLORE: size of neighborhood: (4 pixel neighborhood versus 8 pixel neighborhood)
 
 
-#source: region from source image to place in target image
+#source: source image, a region of which will be placed into target image
 #target: image into which to place the source region
 #mask: specifies which part of the source image to place in the target image
 	#matrix: 1 if corresponding pixel is in region to be put in target, 0 otherwise
 #mixedGradient: boolean whether or not we want to use mixed gradients
-#alignSource.m says where in the target image to put the region from source image
 
-#TODO: separate into 3 color channels
+#Assumes: that you've specified a source region and aligned the source and target image
+# so that the region of the source image is where you want it to be in the target image
 def poissonBlend(source, target, mask, useMixedGradient):
-	#Step 1: select source region and place to put it in target image, align source and target image
-	#can manually do in Matlab for now
-	#TODO: do in Python
+	
 	
 	#Step 2: solve blending constraints
-	#TODO: set source image (and region) and target image (and region) later
 	sourceWidth = source.shape[1]
 	sourceHeight = source.shape[0]
 	
@@ -38,11 +39,6 @@ def poissonBlend(source, target, mask, useMixedGradient):
 	#keep track of number of equations
 	e = 0
 	
-	#EXPLORE: assign weighting factor for gradient constraint vs value constraint
-	#(instead of just 1s and -1's: equal weight)
-	
-	#EXPLORE: size of neighborhood: (4 pixel neighborhood versus 8 pixel neighborhood)
-
 	#for each pixel in the source image
 	for i in range(0,sourceWidth): #column
 		for j in range(0,sourceHeight): #row
@@ -111,7 +107,6 @@ def poissonBlend(source, target, mask, useMixedGradient):
 	A=scipy.sparse.csr_matrix((Adata,(ArowIndices,AcolIndices)),shape=(e,sourceWidth * sourceHeight))
 
 	#solve the least squares problem
-#	x = np.linalg.lstsq(A,b)[0]
 	b = np.array(b)
 	x = scipy.sparse.linalg.lsqr(A,b)[0]
 	x = x.reshape(source.shape)
@@ -127,7 +122,9 @@ def poissonBlend(source, target, mask, useMixedGradient):
 	return x	
 
 if __name__ == "__main__":
+	#basic test (only tests syntactic correctness)
 	source = np.matrix('1 2 3; 4 5 6; 7 8 9')
 	target = np.matrix('3 1 8; 2 4 4; 7 9 5')
-	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')
-	poissonBlend(source, target, mask, False)
+	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')]
+	useMixedGradient = False
+	poissonBlend(source, target, mask, useMixedGradient)
