@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.colors
+import poissonBlending
 
 if __name__=="__main__":
 
@@ -23,6 +24,13 @@ if __name__=="__main__":
 	gradient_value=(imHSV[:imHSV.shape[0]-1,0:imHSV.shape[1]-1,2]-imHSV[:imHSV.shape[0]-1,1:imHSV.shape[1],2])**2 + \
 				(imHSV[0:imHSV.shape[0]-1,:imHSV.shape[0]-1,2]-imHSV[1:imHSV.shape[0],:imHSV.shape[0]-1,2])**2
 
+	mask=np.ones((imRGB.shape[0]-1,imRGB.shape[1]-1))
+	mask=np.vstack((np.hstack((mask,np.zeros((imRGB.shape[0]-1,1)))),np.zeros((1,imRGB.shape[1]))))
+
+	#use max gradient between saturation and value channels 
+	finalImage = poissonBlending.poissonBlend(imHSV[:,:,1],imHSV[:,:,2],mask,True)
+	finalImage=finalImage*mask+imHSV[:,:,2]*(1-mask)
+
 #	plt.figure()
 #	plt.imshow(imRGB[:,:,0],cmap=cm.Greys_r)
 #	plt.figure()
@@ -35,12 +43,14 @@ if __name__=="__main__":
 #	plt.imshow(imHSV[:,:,1],cmap=cm.Greys_r)
 #	plt.figure()
 #	plt.imshow(imHSV[:,:,2],cmap=cm.Greys_r)
+#	plt.figure()
+#	plt.imshow(gradient_hue,cmap=cm.Greys_r)
+#	plt.figure()
+#	plt.imshow(gradient_saturation,cmap=cm.Greys_r)
+#	plt.figure()
+#	plt.imshow(gradient_value,cmap=cm.Greys_r)
 	plt.figure()
-	plt.imshow(gradient_hue,cmap=cm.Greys_r)
-	plt.figure()
-	plt.imshow(gradient_saturation,cmap=cm.Greys_r)
-	plt.figure()
-	plt.imshow(gradient_value,cmap=cm.Greys_r)
+	plt.imshow(finalImage,cmap=cm.Greys_r)
 
 	plt.show()
 
