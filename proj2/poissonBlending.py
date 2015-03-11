@@ -38,7 +38,7 @@ def poissonBlend(source, target, mask, useMixedGradient):
 	
 	#keep track of number of equations
 	e = 0
-	
+	w=2	
 	#for each pixel in the source image
 	for i in range(0,sourceWidth): #column
 		for j in range(0,sourceHeight): #row
@@ -56,10 +56,10 @@ def poissonBlend(source, target, mask, useMixedGradient):
 						#two conditions:
 						#either m or n is nonzero, so pixel's neighbor is distinct from it
 						#neighboring pixel is also in the source region
-						if m + n > 0 and mask[j+n,i+m]:
+						if not m==n and mask[j+n,i+m]:
 							ArowIndices.append(e) #the e-th equation
 							AcolIndices.append(j*sourceWidth + i) #which entry
-							Adata.append(1) #v_i
+							Adata.append(w) #v_i
 						
 							neighbor = source[j+n,i+m]
 							
@@ -68,7 +68,7 @@ def poissonBlend(source, target, mask, useMixedGradient):
 							
 							ArowIndices.append(e)
 							AcolIndices.append((j+n)*sourceWidth + (i+m))
-							Adata.append(-1) #-v_j
+							Adata.append(-w) #-v_j
 						
 							#solution is the gradient (default: assume it's the gradient in source image)
 							gradient = float(originalPixelValue) - neighbor #note: make the solution be a float
@@ -79,7 +79,9 @@ def poissonBlend(source, target, mask, useMixedGradient):
 									gradient = targetGradient #use the gradient with the larger magnitude
 							b.append(gradient)
 							e += 1
-						if m + n > 0 and not mask[j+n,i+m]:
+				for m in range(-1,2):
+					for n in range(-1,2):
+						if not m==n and not mask[j+n,i+m]:
 							ArowIndices.append(e) #the e-th equation
 							AcolIndices.append(j*sourceWidth + i) #which entry
 							Adata.append(1) #v_i
@@ -125,6 +127,6 @@ if __name__ == "__main__":
 	#basic test (only tests syntactic correctness)
 	source = np.matrix('1 2 3; 4 5 6; 7 8 9')
 	target = np.matrix('3 1 8; 2 4 4; 7 9 5')
-	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')]
+	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')
 	useMixedGradient = False
 	poissonBlend(source, target, mask, useMixedGradient)
