@@ -9,6 +9,8 @@ import scipy.sparse.linalg
 
 #EXPLORE: size of neighborhood: (4 pixel neighborhood versus 8 pixel neighborhood)
 
+#EXPLORE: weighted average of source and target gradients
+
 
 #source: source image, a region of which will be placed into target image
 #target: image into which to place the source region
@@ -125,6 +127,6 @@ if __name__ == "__main__":
 	#basic test (only tests syntactic correctness)
 	source = np.matrix('1 2 3; 4 5 6; 7 8 9')
 	target = np.matrix('3 1 8; 2 4 4; 7 9 5')
-	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')]
+	mask = np.matrix('1 1 0; 1 1 0; 0 0 0')
 	useMixedGradient = False
 	poissonBlend(source, target, mask, useMixedGradient)
