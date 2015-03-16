@@ -9,6 +9,8 @@ import scipy.sparse.linalg
 
 #EXPLORE: size of neighborhood: (4 pixel neighborhood versus 8 pixel neighborhood)
 
+#EXPLORE: weighted average of source and target gradients
+
 
 #source: source image, a region of which will be placed into target image
 #target: image into which to place the source region
