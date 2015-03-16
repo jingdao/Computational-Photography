@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8"/>
+<title>Project 2</title>
+<style type="text/css">
+body{
+	/*width: 760px; /* how wide to make your web page */
+	/*background-color: #dddddd;*/ /* what color to make the background */
+	margin: 0 auto;
+	/*padding: 50px;*/
+	font:12px/16px Verdana, sans-serif; /* default font */
+}
+div#main{
+	/*background-color: #dddddd;*/
+	margin: 0;
+	padding: 50px;
+	/*padding: 10px;*/
+}
+h1 {
+	text-decoration: underline;
+	text-align:center;
+}
+h2 {
+	text-align:center;
+}
+.radiance {
+	height:500px;
+}
+.graph {
+	width:250px;
+}
+.large_graph {
+	width:500px;
+}
+.photo {
+	width:100px;
+	display:none;
+}
+.equation {
+	font-style:italic;
+	font-family: serif;
+	font-size: 200%;
+	text-align:center;
+}
+.poster {
+	text-align: center;
+}
+#radiance_div {
+	text-align:center;
+}
+#title-div {
+	height:20vh;
+}
+#poster-div {
+	height: 80vh;
+	text-align:center;
+}
+</style>
+</head>
+<body>
+	<div id="title-div">
+	<h1> CSE 555 (Computational Photography) Project 2 </h1>
+	<h1> Gradient-Domain Fusion </h1>
+	<h2> Mark Heimann & Jing Dao Chen 3/17/2015 </h2>
+	</div>
+	<div id="poster-div">
+	<a href="results/penguin-chick.png"><img class="poster" src="results/penguin-chick.png"/></a>
+	</div>
+	<div id="main">
+		<h3> Overview </h3>
+		<p>
+		<h3> Data sets </h3>
+		<b>Penguin in snow</b>
+		<a href="samples/penguin_chick_aligned.jpg">Source</a>
+		<a href="samples/penguin_chick_mask.jpg">Mask</a>
+		<a href="samples/im2_small.JPG">Target</a>
+		<br><b>Mona Lisa</b>
+		<a href="samples/mona-leber-source.jpg">Source</a>
+		<a href="samples/mona-leber-mask.jpg">Mask</a>
+		<a href="samples/mona-leber-target.jpg">Target</a>
+		<br><b>Plane</b>
+		<a href="samples/plane_src.jpg">Source</a>
+		<a href="samples/plane_mask.jpg">Mask</a>
+		<a href="samples/plane_tgt.jpg">Target</a>
+		</p>
+		<p>
+		<h3>Results</h3>
+		<br><b>Toy Problem</b><br>
+		This problem involves reconstructing an image based on 3 constraints:
+		horizontal gradient, vertical gradient and first pixel value (acts as constant of integration).
+		<div id="radiance_div">
+		<a href="results/toy.png"><img class="radiance" src="results/toy.png"/></a>
+		</div>
+		<br><b>Poisson blending</b><br>
+		<br><b>Penguin in snow</b><br>
+		<a href="results/penguin-chick.png"><img class="radiance" src="results/penguin-chick.png"/></a>
+		<br><b>Mona Lisa</b><br>
+		<a href="results/mona-leber.png"><img class="radiance" src="results/mona-leber.png"/></a>
+		<br><b>Plane</b><br>
+		<a href="results/plane.png"><img class="radiance" src="results/plane.png"/></a>
+		</div>
+		</p>
+		<p>
+		<h3>Challenges:</h3>
+		<ul>
+			<li>Ideal weighting ratio between gradient constraint and pixel value constraint is hard to determine.</li>
+			<li>Constructing the A matrix is tricky because the relationship between neighbouring indices is not straightforward.</li>
+		</ul>
+		</p>
+		<p>
+		<h3> References </h3>
+		<a href="http://cs.brown.edu/courses/csci1950-g/asgn/proj2/resources/PoissonImageEditing.pdf">Poisson Image Editing</a>
+		</p>
+		<p>
+		<h3> Source Code </h3>
+		<a href="https://github.com/jingdao/Computational-Photography">https://github.com/jingdao/Computational-Photography</a>
+		</p>
+	</div>
+</body>
+</html>
