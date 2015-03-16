@@ -32,27 +32,45 @@ def testPoissonBlend(srcFile,tgtFile,maskFile,useMixedGradient):
 	vRed = np.array(vRed,dtype=np.uint8)
 	vGreen = np.array(vGreen,dtype=np.uint8)
 	vBlue = np.array(vBlue,dtype=np.uint8)
+
+	#this is the non-blended image
+	tgt_nonblended = np.zeros(tgt.shape,dtype=np.uint8)
+	tgt_nonblended[:,:,0] = mask*src[:,:,0] + (1 - mask)*tgt[:,:,0]
+	tgt_nonblended[:,:,1] = mask*src[:,:,1] + (1 - mask)*tgt[:,:,1]
+	tgt_nonblended[:,:,2] = mask*src[:,:,2] + (1 - mask)*tgt[:,:,2]
 	
 	#put blended values of source region back into target region
-	tgt[:,:,0] = mask*vRed + (1 - mask)*tgt[:,:,0]
-	tgt[:,:,1] = mask*vGreen + (1 - mask)*tgt[:,:,1]
-	tgt[:,:,2] = mask*vBlue + (1 - mask)*tgt[:,:,2]
+	tgt_blended = np.zeros(tgt.shape,dtype=np.uint8)
+	tgt_blended[:,:,0] = mask*vRed + (1 - mask)*tgt[:,:,0]
+	tgt_blended[:,:,1] = mask*vGreen + (1 - mask)*tgt[:,:,1]
+	tgt_blended[:,:,2] = mask*vBlue + (1 - mask)*tgt[:,:,2]
 
 	#this is the image with only values from the reconstructed source region
-	src2 = np.dstack([vRed,vGreen,vBlue])
+	src_reconstructed = np.dstack([vRed,vGreen,vBlue])
+
 	
+#	plt.figure()
+#	plt.imshow(mask)
+#	plt.figure()
+#	plt.imshow(src_reconstructed)
+#	plt.figure()
+#	plt.imshow(tgt[:,:,0],cmap=cm.Greys_r)
+#	plt.figure()
+#	plt.imshow(tgt[:,:,1],cmap=cm.Greys_r)
+#	plt.figure()
+#	plt.imshow(tgt[:,:,2],cmap=cm.Greys_r)
 	plt.figure()
-	plt.imshow(mask)
-	plt.figure()
-	plt.imshow(src2)
-	plt.figure()
-	plt.imshow(tgt[:,:,0],cmap=cm.Greys_r)
-	plt.figure()
-	plt.imshow(tgt[:,:,1],cmap=cm.Greys_r)
-	plt.figure()
-	plt.imshow(tgt[:,:,2],cmap=cm.Greys_r)
+	plt.imshow(src)
+	plt.title("Source")
 	plt.figure()
 	plt.imshow(tgt)
+	plt.title("Target")
+	plt.figure()
+	plt.imshow(tgt_nonblended)
+	plt.title("Non-Blended image")
+	plt.figure()
+	plt.imshow(tgt_blended)
+	plt.title("Blended image")
 
 if __name__=="__main__":
 	useMixedGradient = False
@@ -60,5 +78,5 @@ if __name__=="__main__":
 #	testPoissonBlend('samples/penguin_chick_aligned.jpg','samples/im2_small.JPG','samples/penguin_chick_mask.jpg',useMixedGradient)
 #	testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg',useMixedGradient)
 #	testPoissonBlend('samples/plane_src.jpg','samples/plane_tgt.jpg','samples/plane_mask.jpg',useMixedGradient)
-	testPoissonBlend('samples/mixed_src.jpg','samples/mixed_tgt.jpg','samples/mixed_mask.jpg',True)
+	testPoissonBlend('samples/mixed_src.jpg','samples/mixed_tgt.jpg','samples/mixed_mask.jpg',False)
 	plt.show()

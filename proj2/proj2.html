@@ -24,7 +24,8 @@ h2 {
 	text-align:center;
 }
 .radiance {
-	height:500px;
+	height:400px;
+	display:inline;
 }
 .graph {
 	width:250px;
@@ -45,7 +46,7 @@ h2 {
 .poster {
 	text-align: center;
 }
-#radiance_div {
+.radiance_div {
 	text-align:center;
 }
 #title-div {
@@ -68,38 +69,41 @@ h2 {
 	</div>
 	<div id="main">
 		<h3> Overview </h3>
-		<p>
-		<h3> Data sets </h3>
-		<b>Penguin in snow</b>
-		<a href="samples/penguin_chick_aligned.jpg">Source</a>
-		<a href="samples/penguin_chick_mask.jpg">Mask</a>
-		<a href="samples/im2_small.JPG">Target</a>
-		<br><b>Mona Lisa</b>
-		<a href="samples/mona-leber-source.jpg">Source</a>
-		<a href="samples/mona-leber-mask.jpg">Mask</a>
-		<a href="samples/mona-leber-target.jpg">Target</a>
-		<br><b>Plane</b>
-		<a href="samples/plane_src.jpg">Source</a>
-		<a href="samples/plane_mask.jpg">Mask</a>
-		<a href="samples/plane_tgt.jpg">Target</a>
-		</p>
-		<p>
-		<h3>Results</h3>
-		<br><b>Toy Problem</b><br>
+		<h3>Toy Problem</h3>
 		This problem involves reconstructing an image based on 3 constraints:
 		horizontal gradient, vertical gradient and first pixel value (acts as constant of integration).
-		<div id="radiance_div">
+		<div class="radiance_div">
 		<a href="results/toy.png"><img class="radiance" src="results/toy.png"/></a>
 		</div>
-		<br><b>Poisson blending</b><br>
-		<br><b>Penguin in snow</b><br>
+		<h3>Poisson blending</h3>
+		<div class="radiance_div"><br><b>Penguin in snow</b><br></div>
+		<a href="results/penguin_source.png"><img class="radiance" src="results/penguin_source.png"/></a>
+		<a href="results/penguin_target.png"><img class="radiance" src="results/penguin_target.png"/></a>
+		<a href="results/penguin_nonblended.png"><img class="radiance" src="results/penguin_nonblended.png"/></a>
+		<a href="results/penguin.png"><img class="radiance" src="results/penguin.png"/></a>
+		<div class="radiance_div"><br><b>Penguin in snow 2</b><br></div>
+		<a href="results/penguin-chick_source.png"><img class="radiance" src="results/penguin-chick_source.png"/></a>
+		<a href="results/penguin-chick_target.png"><img class="radiance" src="results/penguin-chick_target.png"/></a>
+		<a href="results/penguin-chick_nonblended.png"><img class="radiance" src="results/penguin-chick_nonblended.png"/></a>
 		<a href="results/penguin-chick.png"><img class="radiance" src="results/penguin-chick.png"/></a>
-		<br><b>Mona Lisa</b><br>
+		<div class="radiance_div"><br><b>Mona Lisa</b><br></div>
+		<a href="results/mona-leber_source.png"><img class="radiance" src="results/mona-leber_source.png"/></a>
+		<a href="results/mona-leber_target.png"><img class="radiance" src="results/mona-leber_target.png"/></a>
+		<a href="results/mona-leber_nonblended.png"><img class="radiance" src="results/mona-leber_nonblended.png"/></a>
 		<a href="results/mona-leber.png"><img class="radiance" src="results/mona-leber.png"/></a>
-		<br><b>Plane</b><br>
+		<div class="radiance_div"><br><b>Plane</b><br></div>
+		<a href="results/plane_source.png"><img class="radiance" src="results/plane_source.png"/></a>
+		<a href="results/plane_target.png"><img class="radiance" src="results/plane_target.png"/></a>
+		<a href="results/plane_nonblended.png"><img class="radiance" src="results/plane_nonblended.png"/></a>
 		<a href="results/plane.png"><img class="radiance" src="results/plane.png"/></a>
-		</div>
-		</p>
+		<h3>Mixed Gradients Blending</h3>
+		<div class="radiance_div"><br><b>Writing on textured background</b><br></div>
+		<a href="results/mixed_source.png"><img class="radiance" src="results/mixed_source.png"/></a>
+		<a href="results/mixed_target.png"><img class="radiance" src="results/mixed_target.png"/></a>
+		<a href="results/mixed_nonblended.png"><img class="radiance" src="results/mixed_nonblended.png"/></a>
+		<a href="results/mixed_nogradient.png"><img class="radiance" src="results/mixed_nogradient.png"/></a>
+		<a href="results/mixed.png"><img class="radiance" src="results/mixed.png"/></a>
+		<a href="results/mixed_improved.png"><img class="radiance" src="results/mixed_improved.png"/></a>
 		<p>
 		<h3>Challenges:</h3>
 		<ul>
