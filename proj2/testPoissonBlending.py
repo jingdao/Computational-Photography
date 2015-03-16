@@ -78,5 +78,5 @@ if __name__=="__main__":
 #	testPoissonBlend('samples/penguin_chick_aligned.jpg','samples/im2_small.JPG','samples/penguin_chick_mask.jpg',useMixedGradient)
 #	testPoissonBlend('samples/mona-leber-source.jpg','samples/mona-leber-target.jpg','samples/mona-leber-mask.jpg',useMixedGradient)
 #	testPoissonBlend('samples/plane_src.jpg','samples/plane_tgt.jpg','samples/plane_mask.jpg',useMixedGradient)
-	testPoissonBlend('samples/mixed_src.jpg','samples/mixed_tgt.jpg','samples/mixed_mask.jpg',False)
+	testPoissonBlend('samples/mixed_src.jpg','samples/mixed_tgt.jpg','samples/mixed_mask.jpg',True)
 	plt.show()

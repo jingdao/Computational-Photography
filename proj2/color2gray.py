@@ -16,6 +16,7 @@ if __name__=="__main__":
 
 	imRGB_float=np.dstack((1.0*imRGB[:,:,0]/255,1.0*imRGB[:,:,1]/255,1.0*imRGB[:,:,2]/255))
 	imHSV=matplotlib.colors.rgb_to_hsv(imRGB_float)
+	imGrayScale=np.mean(imRGB,axis=2)
 
 	gradient_hue=(imHSV[:imHSV.shape[0]-1,0:imHSV.shape[1]-1,0]-imHSV[:imHSV.shape[0]-1,1:imHSV.shape[1],0])**2 + \
 				(imHSV[0:imHSV.shape[0]-1,:imHSV.shape[0]-1,0]-imHSV[1:imHSV.shape[0],:imHSV.shape[0]-1,0])**2
@@ -49,6 +50,8 @@ if __name__=="__main__":
 #	plt.imshow(gradient_saturation,cmap=cm.Greys_r)
 #	plt.figure()
 #	plt.imshow(gradient_value,cmap=cm.Greys_r)
+#	plt.figure()
+#	plt.imshow(imGrayScale,cmap=cm.Greys_r)
 	plt.figure()
 	plt.imshow(finalImage,cmap=cm.Greys_r)
 
