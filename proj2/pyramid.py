@@ -3,21 +3,28 @@ from scipy import ndimage
 import matplotlib.pyplot as plt
 import numpy as np
 
-#create a Gaussian pyramid from an image using a given sigma
+#create a Laplacian pyramid for an image using a given sigma
 #and a square Gaussian filter of a given odd size
 #one color channel at a time
 def createLaplacianPyramid(image,sigma,filterSize,numLayers):
 	#represent pyramid as list of layers
 	gPyramid = [image] #first layer of pyramid
+	lPyramid = []
 	for i in range(1,numLayers):
-		#convolve the previous layer with Gaussian filter
+		#blur the previous layer with Gaussian filter
 		nextLayer = apply_gaussian_filter(gPyramid[i-1],sigma,filterSize)
+		highPass = gPyramid[i-1] - nextLayer #captures detail: image minus blurred copy
+		lPyramid.append(highPass) #add highpass band to Laplacian pyramid
+		
 		#subsample
 		nextLayer = subsample(nextLayer)
 		gPyramid.append(nextLayer)
-	return gPyramid
+	lPyramid.append(gPyramid[len(gPyramid) - 1]) #append lowpass band: the last image in Gaussian pyramid
+	#return gPyramid
+	return lPyramid
 
 #subsample a matrix: get every other row and column
+#Reduce
 #TODO: vectorize if possible	
 def subsample(matrix):
 	numRows = np.shape(matrix)[0]
@@ -33,6 +40,24 @@ def subsample(matrix):
 			 	if col % 2 == 0:
 					newMatrix[row/2,col/2] = matrix[row,col]
 	
+	#return final result			
+	return newMatrix
+	
+#upsample a matrix: insert zeros between every other row and column
+#Expand
+#TODO: vectorize if possible	
+def subsample(matrix):
+	numRows = np.shape(matrix)[0]
+	numCols = np.shape(matrix)[1]
+
+	#holds the values of the upsampled matrix
+	newMatrix = np.zeros((numRows*2, numCols*2))
+
+	#"insert" new rows and columns
+	for row in range(0,numRows):
+		for col in range(0,numCols):
+			newMatrix[2*row,2*col] = matrix[row,col]
+
 	#return final result			
 	return newMatrix
 			
@@ -102,7 +127,7 @@ if __name__ == "__main__":
 	pyramidGreen = createLaplacianPyramid(imageGreen,sigma,filterSize,numLayers)
 	pyramidBlue = createLaplacianPyramid(imageBlue,sigma,filterSize,numLayers)
 	#display images in pyramid
-	for i in range(0,numLayers):
+	for i in range(0,len(pyramidRed)):
 		print("Layer %d has shape " % i)
 		print np.shape(pyramidRed[i])
 		
