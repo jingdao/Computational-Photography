@@ -106,17 +106,16 @@ h2 {
 		and the source background also has a different texture from the target background.
 		<h3>Mixed Gradients Blending</h3>
 		<div class="radiance_div"><br><b>Writing on textured background</b><br></div>
-		<a href="results/mixed_source.png"><img class="radiance" src="results/mixed_source.png"/></a>
-		<a href="results/mixed_target.png"><img class="radiance" src="results/mixed_target.png"/></a>
-		<a href="results/mixed_nonblended.png"><img class="radiance" src="results/mixed_nonblended.png"/></a>
-		<a href="results/mixed_nogradient.png"><img class="radiance" src="results/mixed_nogradient.png"/></a><br>
+		<a href="results/leaves_source.png"><img class="radiance" src="results/leaves_source.png"/></a>
+		<a href="results/leaves_target.png"><img class="radiance" src="results/leaves_target.png"/></a>
+		<a href="results/leaves_nonblended.png"><img class="radiance" src="results/leaves_nonblended.png"/></a>
+		<a href="results/leaves_nogradient.png"><img class="radiance" src="results/leaves_nogradient.png"/></a><br>
 		As shown above, with regular Poisson blending, the source region still retains the plain background of the original image.
-		To blend the source with the textured background of the target, a mixed gradient technique is used.<br>
-		<a href="results/mixed.png"><img class="radiance" src="results/mixed.png"/></a><br>
+		To blend the source with the textured background of the target, a mixed gradient technique is used.
 		To minimize the effect of the slight blue tint in the result image, we tried increasing the weighting of the gradient constraint
 		compared to the pixel value constraint in solving the Poisson equation. This allows for an image with more balanced color but with the
 		tradeoff of a less smooth blending into the background.<br>
-		<a href="results/mixed_improved.png"><img class="radiance" src="results/mixed_improved.png"/></a>
+		<a href="results/leaves.png"><img class="radiance" src="results/leaves.png"/></a><br>
 		<h3>Color to Gray</h3>
 		This problem involves trying to overcome the issue of preserving contrast when converting an image to grayscale.
 		For example, in the 2 images shown below, the right image is a grayscale version of the left image with the 3 color channels averaged.
