@@ -24,7 +24,7 @@ def dist2prob(distance, sigma):
 #get matrix of L2 distances between all frames in the video
 def differencesMatrix(frames):
 	numFrames = np.shape(frames)[1]
-	diffMatrix = np.zeros(numFrames,numFrames)
+	diffMatrix = np.zeros((numFrames,numFrames))
 	for frame1 in range(0,numFrames):
 		for frame2 in range(0,numFrames):
 			#note: if frames are the same, distance will be zero, as it already is
@@ -32,7 +32,7 @@ def differencesMatrix(frames):
 			#so without loss of generality assume frame1 < frame2 and cover the case where
 			#frame1 > frame2 by symmetry
 			if frame1 < frame2:
-				dist = l2(frame1,frame2)
+				dist = l2(frames[frame1],frames[frame2])
 				diffMatrix[frame1,frame2] = dist
 				diffMatrix[frame2,frame1] = dist
 	return diffMatrix
@@ -40,7 +40,7 @@ def differencesMatrix(frames):
 #filter the difference matrix, so as to match subsequences instead of individual frames	
 def filter(diffMatrix):
 	numFrames = np.shape(frames)[1]
-	filteredDists = np.zeros(numFrames,numFrames)
+	filteredDists = np.zeros((numFrames,numFrames))
 	#binomial weights
 	#ideally calculate based on m (in the paper's notation), but in practice m = 1 or 2
 	m = 2
@@ -56,7 +56,7 @@ def filter(diffMatrix):
 #get matrix of probabilities of transitions between frames
 def probabilityMatrix(distanceMatrix, sigma):
 	numFrames = np.shape(frames)[1]
-	probMatrix = np.zeros(numFrames,numFrames)
+	probMatrix = np.zeros((numFrames,numFrames))
 	for frame1 in range(0,numFrames):
 		#so successor of last frame is the first frame
 		successor = (frame1 + 1) % numFrames
