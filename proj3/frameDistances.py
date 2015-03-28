@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import stats
 
 #takes in two vectors which we assume are of the same length
 #computes l2 distance between them
@@ -22,7 +23,7 @@ def dist2prob(distance, sigma):
 	return np.exp(-distance/sigma)
 	
 #get matrix of L2 distances between all frames in the video
-def differencesMatrix(frames):
+def diffMatrix(frames):
 	numFrames = np.shape(frames)[1]
 	diffMatrix = np.zeros((numFrames,numFrames))
 	for frame1 in range(0,numFrames):
@@ -38,8 +39,8 @@ def differencesMatrix(frames):
 	return diffMatrix
 
 #filter the difference matrix, so as to match subsequences instead of individual frames	
-def filter(diffMatrix):
-	numFrames = np.shape(frames)[1]
+def filterDists(diffMatrix):
+	numFrames = np.shape(diffMatrix)[1]
 	filteredDists = np.zeros((numFrames,numFrames))
 	#binomial weights
 	#ideally calculate based on m (in the paper's notation), but in practice m = 1 or 2
@@ -49,13 +50,16 @@ def filter(diffMatrix):
 		for frame2 in range(0,numFrames):
 			filteredVal = 0
 			for index in range(0,len(weights)):
-				filteredVal += diffMatrix[frame1+index-m, frame2+index-m]*weights[index]
-			filteredDists[frame1,frame2] = fileredVal
+				ind1 = frame1+index-m
+				ind2 = frame2+index-m
+				if (ind1 >= 0 and ind2 >= 0 and ind1 < numFrames and ind2 < numFrames):
+					filteredVal += diffMatrix[ind1, ind2]*weights[index]
+			filteredDists[frame1,frame2] = filteredVal
 	return filteredDists
 
 #get matrix of probabilities of transitions between frames
 def probabilityMatrix(distanceMatrix, sigma):
-	numFrames = np.shape(frames)[1]
+	numFrames = np.shape(distanceMatrix)[1]
 	probMatrix = np.zeros((numFrames,numFrames))
 	for frame1 in range(0,numFrames):
 		#so successor of last frame is the first frame
@@ -68,5 +72,14 @@ def probabilityMatrix(distanceMatrix, sigma):
 	probMatrix = probMatrix/probMatrix.sum(axis=1,keepdims = True)
 	return probMatrix
 		
+#get custom probability distributions specified by the rows of the probability matrix
+def probabilityDistributions(probabilityMatrix):
+	numFrames = np.shape(probabilityMatrix)[1]
+	distributions = []
+	x = np.arange(numFrames)
+	for frame in range(0,numFrames):
+		distributions.append( stats.rv_discrete(values=(x,probabilityMatrix[frame,:])) )
+	return distributions
+	
 def predictFutureCost():
 	pass	
