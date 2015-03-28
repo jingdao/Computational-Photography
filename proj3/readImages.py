@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.animation
+from frameDistances import *
 
 #	get pixel values from all frames of a video
 #	dirName: directory where video frame images are stored
@@ -30,11 +31,21 @@ def animate(pixelArray,numFrames,imHeight,imWidth):
 	ims=[]
 	fig = plt.figure()
 	for i in range(0,numFrames):
-		imAxes = plt.imshow(pixelArray[:,0].reshape((imHeight,imWidth)),cmap=cm.Greys_r)
+		imAxes = plt.imshow(pixelArray[:,i].reshape((imHeight,imWidth)),cmap=cm.Greys_r)
 		ims.append([imAxes])
-	matplotlib.animation.ArtistAnimation(fig,ims,interval=33,blit=True)
+	ani=matplotlib.animation.ArtistAnimation(fig,ims,interval=33,blit=True)
 	plt.show()
 
 if __name__=="__main__":
 	pixelArray,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
 	animate(pixelArray,numFrames,imHeight,imWidth)
+#	dist = distanceMatrix(pixelArray)
+#	prob = probabilityMatrix(pixelArray,dist,1000)
+#	plt.figure()
+#	plt.imshow(dist)
+#	plt.colorbar()
+#	plt.figure()
+#	plt.imshow(prob)
+#	plt.colorbar()
+#	plt.show()
+
