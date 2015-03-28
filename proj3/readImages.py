@@ -20,27 +20,47 @@ def getPixelArrayFromFiles(dirName):
 			imHeight=imArr.shape[0]
 			imWidth=imArr.shape[1]
 			imRed1D=np.mat(imArr[:,:,0]).A1
-			pixelArray=imRed1D
+			pixelArrayRed=imRed1D
+			imGreen1D=np.mat(imArr[:,:,1]).A1
+			pixelArrayGreen=imGreen1D
+			imBlue1D=np.mat(imArr[:,:,2]).A1
+			pixelArrayBlue=imBlue1D
 		else:
 			imRed1D=np.mat(imArr[:,:,0]).A1
-			pixelArray=np.vstack((pixelArray,imRed1D))
+			pixelArrayRed=np.vstack((pixelArrayRed,imRed1D))
+			imGreen1D=np.mat(imArr[:,:,1]).A1
+			pixelArrayGreen=np.vstack((pixelArrayGreen,imGreen1D))
+			imBlue1D=np.mat(imArr[:,:,2]).A1
+			pixelArrayBlue=np.vstack((pixelArrayBlue,imBlue1D))
 
-	return pixelArray.T,numFrames,imHeight,imWidth
+	return pixelArrayRed.T,pixelArrayGreen.T,pixelArrayBlue.T,numFrames,imHeight,imWidth
 
-def animate(pixelArray,numFrames,imHeight,imWidth):
-	ims=[]
-	fig = plt.figure()
+def animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth):
+#	ims=[]
+#	fig = plt.figure()
+#	for i in range(0,numFrames):
+#		imAxes = plt.imshow(pixelArray[:,i].reshape((imHeight,imWidth)),cmap=cm.Greys_r)
+#		ims.append([imAxes])
+#	ani=matplotlib.animation.ArtistAnimation(fig,ims,interval=33,blit=True)
+	frames=[]
 	for i in range(0,numFrames):
-		imAxes = plt.imshow(pixelArray[:,i].reshape((imHeight,imWidth)),cmap=cm.Greys_r)
-		ims.append([imAxes])
-	ani=matplotlib.animation.ArtistAnimation(fig,ims,interval=33,blit=True)
+		vRed=pixelArrayRed[:,i].reshape((imHeight,imWidth))
+		vGreen=pixelArrayGreen[:,i].reshape((imHeight,imWidth))
+		vBlue=pixelArrayBlue[:,i].reshape((imHeight,imWidth))
+		frames.append(np.dstack((vRed,vGreen,vBlue)))
 	plt.show()
+	imAxes = plt.imshow(frames[0])
+	i=0
+	while(True):
+		imAxes.set_data(frames[i%numFrames])
+		plt.pause(0.033)
+		i+=1
 
 if __name__=="__main__":
-	pixelArray,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
-	animate(pixelArray,numFrames,imHeight,imWidth)
-#	dist = distanceMatrix(pixelArray)
-#	prob = probabilityMatrix(pixelArray,dist,1000)
+	pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
+	animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth)
+#	diff = differencesMatrix(pixelArray)
+#	prob = probabilityMatrix(pixelArray,diff,1000)
 #	plt.figure()
 #	plt.imshow(dist)
 #	plt.colorbar()
