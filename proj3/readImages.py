@@ -36,25 +36,16 @@ def getPixelArrayFromFiles(dirName):
 	return pixelArrayRed.T,pixelArrayGreen.T,pixelArrayBlue.T,numFrames,imHeight,imWidth
 
 def animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth):
-#	ims=[]
-#	fig = plt.figure()
-#	for i in range(0,numFrames):
-#		imAxes = plt.imshow(pixelArray[:,i].reshape((imHeight,imWidth)),cmap=cm.Greys_r)
-#		ims.append([imAxes])
-#	ani=matplotlib.animation.ArtistAnimation(fig,ims,interval=33,blit=True)
+	fig = plt.figure()
 	frames=[]
 	for i in range(0,numFrames):
 		vRed=pixelArrayRed[:,i].reshape((imHeight,imWidth))
 		vGreen=pixelArrayGreen[:,i].reshape((imHeight,imWidth))
 		vBlue=pixelArrayBlue[:,i].reshape((imHeight,imWidth))
-		frames.append(np.dstack((vRed,vGreen,vBlue)))
+		imAxes=plt.imshow(np.dstack((vRed,vGreen,vBlue)))
+		frames.append([imAxes])
+	ani=matplotlib.animation.ArtistAnimation(fig,frames,interval=33,blit=True)
 	plt.show()
-	imAxes = plt.imshow(frames[0])
-	i=0
-	while(True):
-		imAxes.set_data(frames[i%numFrames])
-		plt.pause(0.033)
-		i+=1
 
 if __name__=="__main__":
 	pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')

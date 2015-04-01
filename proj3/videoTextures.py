@@ -2,10 +2,10 @@ from frameDistances import *
 from readImages import *
 from video import *
 
-pixelArray,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
+pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
 #animate(pixelArray,numFrames,imHeight,imWidth)
 
-diffs = diffMatrix(pixelArray)
+diffs = diffMatrix(pixelArrayRed)
 filteredDists = filterDists(diffs)
 
 #for use in converting to probabilities
@@ -17,4 +17,4 @@ distributions = probabilityDistributions(probMatrix)
 #get probabilities
 
 #make video 2x longer
-makeVideo(pixelArray,2*numFrames,imHeight,imWidth, distributions)
+makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth, distributions)

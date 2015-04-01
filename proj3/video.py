@@ -6,15 +6,21 @@ import matplotlib.animation
 
 #use probability matrix to make new video
 #probabilities: probability matrix of transitioning to other frames from the current one
-def makeVideo(pixelArray,numFrames,imHeight,imWidth, probDists):
+def makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth, probDists):
 	videoPauseLength = 0.033
+	frames=[]
+	for i in range(0,numFrames):
+		vRed=pixelArrayRed[:,i].reshape((imHeight,imWidth))
+		vGreen=pixelArrayGreen[:,i].reshape((imHeight,imWidth))
+		vBlue=pixelArrayBlue[:,i].reshape((imHeight,imWidth))
+		frames.append(np.dstack((vRed,vGreen,vBlue)))
 	plt.show()
-	#TODO: get color information
-	imAxes = plt.imshow(pixelArray[:,0].reshape((imHeight,imWidth)),cmap=cm.Greys_r)
+	imAxes = plt.imshow(frames[0])
 	nextImage = 0 #start at 0th image
 	while(True):
-		#TODO: do reshaping up front
+#		imAxes.set_label('Frame index:'+str(nextImage))
+		plt.title('Frame index:'+str(nextImage))
 		nextImage = probDists[nextImage].rvs()
-		imAxes.set_data(pixelArray[:,nextImage].reshape((imHeight,imWidth)))
+		imAxes.set_data(frames[nextImage])
 		plt.pause(videoPauseLength)
 	
