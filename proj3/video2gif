@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if ! [[ -f "$1" ]] || [[ -z "$2" ]] || ! [[ "$2" == *.gif ]]; then
+	echo "Usage: video2gif source destination"
+	exit 1
+fi
+mkdir tmp &>/dev/null
+fps=$(ffmpeg -i $1 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
+ffmpeg -i $1 tmp/%d.png &>/dev/null
+convert -delay 1x$fps tmp/*.png $2
+rm -rf tmp

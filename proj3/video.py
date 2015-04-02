@@ -16,11 +16,30 @@ def makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,im
 		frames.append(np.dstack((vRed,vGreen,vBlue)))
 	plt.show()
 	imAxes = plt.imshow(frames[0])
+	plt.axis('off')
 	nextImage = 0 #start at 0th image
 	while(True):
-#		imAxes.set_label('Frame index:'+str(nextImage))
 		plt.title('Frame index:'+str(nextImage))
 		nextImage = probDists[nextImage].rvs()
 		imAxes.set_data(frames[nextImage])
 		plt.pause(videoPauseLength)
+
+#same function as above except this time the result is not displayed but saved to a video file
+def saveVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFramesInitial,numFramesFinal,imHeight,imWidth,framesPerSecond,probDists):
+	fig = plt.figure()
+	plt.axis('off')
+	frames=[]
+	for i in range(0,numFramesInitial):
+		vRed=pixelArrayRed[:,i].reshape((imHeight,imWidth))
+		vGreen=pixelArrayGreen[:,i].reshape((imHeight,imWidth))
+		vBlue=pixelArrayBlue[:,i].reshape((imHeight,imWidth))
+		frames.append(np.dstack((vRed,vGreen,vBlue)))
+	nextImage=0
+	artists=[]
+	for i in range(0,numFramesFinal):
+		imAxes=plt.imshow(frames[nextImage])
+		artists.append([imAxes])
+		nextImage = probDists[nextImage].rvs()
+	ani=matplotlib.animation.ArtistAnimation(fig,artists,interval=1000/framesPerSecond,blit=True)
+	ani.save('out.mp4',fps=framesPerSecond)
 	

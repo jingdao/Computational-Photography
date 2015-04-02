@@ -17,9 +17,9 @@ avgNonzeroDistance = np.sum(filteredDists)/np.count_nonzero(filteredDists)
 sigma = 2*avgNonzeroDistance
 probMatrix = probabilityMatrix(filteredDists, sigma)
 distributions = probabilityDistributions(probMatrix)
-#plt.show()
 
 #get probabilities
 
 #make video 2x longer
 makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps,distributions)
+#saveVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,2*numFrames,imHeight,imWidth,fps,distributions)
