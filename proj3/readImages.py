@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.animation
 from frameDistances import *
+import sys
 
 #	get pixel values from all frames of a video
 #	dirName: directory where video frame images are stored
@@ -48,7 +49,11 @@ def animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWi
 	plt.show()
 
 if __name__=="__main__":
-	pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
+	if len(sys.argv)==2:
+		dataset=sys.argv[1]
+	else:
+		dataset='clock'
+	pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles(dataset)
 	animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth)
 #	diff = differencesMatrix(pixelArray)
 #	prob = probabilityMatrix(pixelArray,diff,1000)

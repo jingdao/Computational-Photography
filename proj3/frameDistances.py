@@ -33,7 +33,7 @@ def diffMatrix(frames):
 			#so without loss of generality assume frame1 < frame2 and cover the case where
 			#frame1 > frame2 by symmetry
 			if frame1 < frame2:
-				dist = l2(frames[frame1],frames[frame2])
+				dist = l2(frames[:,frame1],frames[:,frame2])
 				diffMatrix[frame1,frame2] = dist
 				diffMatrix[frame2,frame1] = dist
 	return diffMatrix

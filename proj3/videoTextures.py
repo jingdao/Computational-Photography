@@ -2,7 +2,11 @@ from frameDistances import *
 from readImages import *
 from video import *
 
-pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles('clock')
+if len(sys.argv)==2:
+	dataset=sys.argv[1]
+else:
+	dataset='clock'
+pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles(dataset)
 #animate(pixelArray,numFrames,imHeight,imWidth)
 
 diffs = diffMatrix(pixelArrayRed)
@@ -13,6 +17,7 @@ avgNonzeroDistance = np.sum(filteredDists)/np.count_nonzero(filteredDists)
 sigma = 2*avgNonzeroDistance
 probMatrix = probabilityMatrix(filteredDists, sigma)
 distributions = probabilityDistributions(probMatrix)
+#plt.show()
 
 #get probabilities
 
