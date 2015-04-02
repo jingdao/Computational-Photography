@@ -6,7 +6,7 @@ if len(sys.argv)==2:
 	dataset=sys.argv[1]
 else:
 	dataset='clock'
-pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles(dataset)
+pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps = getPixelArrayFromFiles(dataset)
 #animate(pixelArray,numFrames,imHeight,imWidth)
 
 diffs = diffMatrix(pixelArrayRed)
@@ -22,4 +22,4 @@ distributions = probabilityDistributions(probMatrix)
 #get probabilities
 
 #make video 2x longer
-makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth, distributions)
+makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps,distributions)

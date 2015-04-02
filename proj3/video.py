@@ -6,8 +6,8 @@ import matplotlib.animation
 
 #use probability matrix to make new video
 #probabilities: probability matrix of transitioning to other frames from the current one
-def makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth, probDists):
-	videoPauseLength = 0.033
+def makeVideo(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps,probDists):
+	videoPauseLength = 1.0/fps
 	frames=[]
 	for i in range(0,numFrames):
 		vRed=pixelArrayRed[:,i].reshape((imHeight,imWidth))

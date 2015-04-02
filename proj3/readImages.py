@@ -34,9 +34,9 @@ def getPixelArrayFromFiles(dirName):
 			imBlue1D=np.mat(imArr[:,:,2]).A1
 			pixelArrayBlue=np.vstack((pixelArrayBlue,imBlue1D))
 
-	return pixelArrayRed.T,pixelArrayGreen.T,pixelArrayBlue.T,numFrames,imHeight,imWidth
+	return pixelArrayRed.T,pixelArrayGreen.T,pixelArrayBlue.T,numFrames,imHeight,imWidth,fps
 
-def animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth):
+def animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps):
 	fig = plt.figure()
 	frames=[]
 	for i in range(0,numFrames):
@@ -45,7 +45,7 @@ def animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWi
 		vBlue=pixelArrayBlue[:,i].reshape((imHeight,imWidth))
 		imAxes=plt.imshow(np.dstack((vRed,vGreen,vBlue)))
 		frames.append([imAxes])
-	ani=matplotlib.animation.ArtistAnimation(fig,frames,interval=33,blit=True)
+	ani=matplotlib.animation.ArtistAnimation(fig,frames,interval=1000/fps,blit=True)
 	plt.show()
 
 if __name__=="__main__":
@@ -53,8 +53,8 @@ if __name__=="__main__":
 		dataset=sys.argv[1]
 	else:
 		dataset='clock'
-	pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth = getPixelArrayFromFiles(dataset)
-	animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth)
+	pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps = getPixelArrayFromFiles(dataset)
+	animate(pixelArrayRed,pixelArrayGreen,pixelArrayBlue,numFrames,imHeight,imWidth,fps)
 #	diff = differencesMatrix(pixelArray)
 #	prob = probabilityMatrix(pixelArray,diff,1000)
 #	plt.figure()
