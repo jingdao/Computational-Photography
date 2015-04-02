@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 #anticipating the future
 #also have the algorithm return if it hasn't converged after a large number of iterations
@@ -27,6 +28,7 @@ def anticipateFutureCosts(diffsMatrix,maxIters,p,alpha,tolerance):
 		
 		#see if matrix values have converged
 		maxDiff = np.max(np.absolute(np.subtract(diffsMatrix,oldMatrix)))
+		#print "maximum difference: ", maxDiff
 		if maxDiff <= tolerance:
 			break
 		
@@ -37,6 +39,10 @@ def anticipateFutureCosts(diffsMatrix,maxIters,p,alpha,tolerance):
 		if numIterations >= maxIters:
 			print "Returning before convergence"
 			print "Maximum difference between matrix entries after last iteration: ", maxDiff
-			
+	
+	#plt.imshow(oldMatrix)
+	#plt.figure()	
+	plt.imshow(diffsMatrix)
+	plt.show()	
 	return diffsMatrix
 		

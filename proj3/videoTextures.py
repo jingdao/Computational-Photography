@@ -3,9 +3,9 @@ from readImages import *
 from video import *
 from evaluateTransitions import *
 
-numIters = 10**2
-p = 10
-alpha = 0.99
+numIters = 10
+p = 2
+alpha = 0.999
 tolerance = 10**-3
 
 if len(sys.argv)==2:
