@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if ! [[ -f "$1" ]] || ! [[ "$1" == *.gif ]] || [[ -z "$2" ]] || [[ -d "$2" ]]; then
+	echo "Usage: gif2img source_gif new_destination_folder"
+	exit 1
+fi
+
+fps=$(identify -format "%T\n" $1 | head -n 1)
+mkdir $2 &>/dev/null
+convert -coalesce $1 PNG32:$2/%d.png
+
+max=1
+for f in $2/*.png;do
+	n=$(basename ${f%.*})
+	if (("$n" > "$max"));then
+		max=$n
+	fi
+done
+
+echo -e "$max\n$fps\n" > $2/data.txt

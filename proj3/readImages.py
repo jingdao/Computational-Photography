@@ -12,7 +12,7 @@ import sys
 def getPixelArrayFromFiles(dirName):
 	f = open(dirName+"/data.txt")
 	numFrames = int(f.readline())
-	fps = int(f.readline()) #frames per second
+	fps = float(f.readline()) #frames per second
 	f.close()
 
 	for i in range(1,numFrames+1):
