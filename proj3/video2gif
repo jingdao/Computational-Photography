@@ -1,11 +1,20 @@
 #!/bin/bash
 
 if ! [[ -f "$1" ]] || [[ -z "$2" ]] || ! [[ "$2" == *.gif ]]; then
-	echo "Usage: video2gif source destination"
+	echo "Usage: video2gif source destination.gif"
 	exit 1
 fi
 mkdir tmp &>/dev/null
 fps=$(ffmpeg -i $1 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
 ffmpeg -i $1 tmp/%d.png &>/dev/null
-convert -delay 1x$fps tmp/*.png $2
+cd tmp
+files=*.png
+sorted_files=""
+for l in $files
+do
+	sorted_files+="$l\n"
+done
+sorted_files=$(echo -e $sorted_files | sort -n)
+convert -delay 1x$fps $sorted_files ../$2
+cd ..
 rm -rf tmp
