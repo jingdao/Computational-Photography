@@ -7,7 +7,7 @@ fi
 
 fps=$(ffmpeg -i $1 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
 mkdir $2 &>/dev/null
-ffmpeg -i $1 -ss 00:30 -t 5 $2/%d.png &>/dev/null
+ffmpeg -i $1 -ss 00:30 -t 5 -vf scale=500:-1 $2/%d.png &>/dev/null
 
 max=1
 for f in $2/*.png;do
