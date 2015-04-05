@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8"/>
-<title>Project 2</title>
+<title>Project 3</title>
 <style type="text/css">
 body{
 	/*width: 760px; /* how wide to make your web page */
@@ -23,9 +23,12 @@ h1 {
 h2 {
 	text-align:center;
 }
+td {
+	text-align:center;
+	vertical-align:center;
+}
 .radiance {
-	height:400px;
-	display:inline;
+	height:300px;
 }
 .graph {
 	width:250px;
@@ -61,74 +64,22 @@ h2 {
 <body>
 	<div id="title-div">
 	<h1> CSE 555 (Computational Photography) Project 3 </h1>
-	<h1> Computational Video </h1>
+	<h1> Video Textures </h1>
 	<h2> Mark Heimann & Jing Dao Chen 4/07/2015 </h2>
 	</div>
 	<div id="poster-div">
-	<a href="results/penguin-chick.png"><img class="poster" src="results/penguin-chick.png"/></a>
+		<a href="lightning/out.gif"><img class="poster" src="lightning/out.gif"/></a><br>
 	</div>
 	<div id="main">
 		<h3> Overview </h3>
-		<h3>Toy Problem</h3>
-		This problem involves reconstructing an image based on 3 constraints:
-		horizontal gradient, vertical gradient and first pixel value (acts as constant of integration).
-		<div class="radiance_div">
-		<a href="results/toy.png"><img class="radiance" src="results/toy.png"/></a>
-		</div>
-		<h3>Poisson blending</h3>
-		The poisson blending method allows us to select a specific region in a source image and blend it into an area in the target image.
-		Reconstructing the result image involves solving a least-squares problem with 2 terms:
-		the gradient term, which states that the gradients in the selected region should be similiar to the source image,
-		and the pixel value term, which states that the pixel values on the border of the selected region should be similiar to the target image.
-		For each of the following data sets, the source image, target image, non-blended image (which is just the source region overlaid on the target image),
-		and the Poisson blending result are shown.<br>
-		<div class="radiance_div"><br><b>Penguin in snow</b><br></div>
-		<a href="results/penguin_source.png"><img class="radiance" src="results/penguin_source.png"/></a>
-		<a href="results/penguin_target.png"><img class="radiance" src="results/penguin_target.png"/></a>
-		<a href="results/penguin_nonblended.png"><img class="radiance" src="results/penguin_nonblended.png"/></a>
-		<a href="results/penguin.png"><img class="radiance" src="results/penguin.png"/></a>
-		<div class="radiance_div"><br><b>Penguin in snow 2</b><br></div>
-		<a href="results/penguin-chick_source.png"><img class="radiance" src="results/penguin-chick_source.png"/></a>
-		<a href="results/penguin-chick_target.png"><img class="radiance" src="results/penguin-chick_target.png"/></a>
-		<a href="results/penguin-chick_nonblended.png"><img class="radiance" src="results/penguin-chick_nonblended.png"/></a>
-		<a href="results/penguin-chick.png"><img class="radiance" src="results/penguin-chick.png"/></a>
-		<div class="radiance_div"><br><b>Mona Lisa</b><br></div>
-		<a href="results/mona-leber_source.png"><img class="radiance" src="results/mona-leber_source.png"/></a>
-		<a href="results/mona-leber_target.png"><img class="radiance" src="results/mona-leber_target.png"/></a>
-		<a href="results/mona-leber_nonblended.png"><img class="radiance" src="results/mona-leber_nonblended.png"/></a>
-		<a href="results/mona-leber.png"><img class="radiance" src="results/mona-leber.png"/></a>
-		<div class="radiance_div"><br><b>Plane</b><br></div>
-		<a href="results/plane_source.png"><img class="radiance" src="results/plane_source.png"/></a>
-		<a href="results/plane_target.png"><img class="radiance" src="results/plane_target.png"/></a>
-		<a href="results/plane_nonblended.png"><img class="radiance" src="results/plane_nonblended.png"/></a>
-		<a href="results/plane.png"><img class="radiance" src="results/plane.png"/></a><br>
-		In this final example, the blending result is not ideal because the mask region is not as tight compared to the previous examples
-		and the source background also has a different texture from the target background.
-		<h3>Mixed Gradients Blending</h3>
-		<div class="radiance_div"><br><b>Writing on textured background</b><br></div>
-		<a href="results/leaves_source.png"><img class="radiance" src="results/leaves_source.png"/></a>
-		<a href="results/leaves_target.png"><img class="radiance" src="results/leaves_target.png"/></a>
-		<a href="results/leaves_nonblended.png"><img class="radiance" src="results/leaves_nonblended.png"/></a>
-		<a href="results/leaves_nogradient.png"><img class="radiance" src="results/leaves_nogradient.png"/></a><br>
-		As shown above, with regular Poisson blending, the source region still retains the plain background of the original image.
-		To blend the source with the textured background of the target, a mixed gradient technique is used.
-		To minimize the effect of the slight blue tint in the result image, we tried increasing the weighting of the gradient constraint
-		compared to the pixel value constraint in solving the Poisson equation. This allows for an image with more balanced color but with the
-		tradeoff of a less smooth blending into the background.<br>
-		<a href="results/leaves.png"><img class="radiance" src="results/leaves.png"/></a><br>
-		<h3>Color to Gray</h3>
-		This problem involves trying to overcome the issue of preserving contrast when converting an image to grayscale.
-		For example, in the 2 images shown below, the right image is a grayscale version of the left image with the 3 color channels averaged.
-		As expected, the number is not visible because the contrast information from the original image is lost.<br>
-		<a href="samples/colorBlindTest35.png"><img class="radiance" src="samples/colorBlindTest35.png"/></a>
-		<a href="results/color2gray_grayscale.png"><img class="radiance" src="results/color2gray_grayscale.png"/></a><br>
-		First we convert the original image to HSV space and computed the gradient of each channel. The 2 channels that show
-		the most information are the saturation channel (below left) and the value channel (below right).<br>
-		<a href="results/color2gray_saturation.png"><img class="radiance" src="results/color2gray_saturation.png"/></a>
-		<a href="results/color2gray_value.png"><img class="radiance" src="results/color2gray_value.png"/></a><br>
-		Finally we combine the information from the 2 channels by formulating a mixed gradients problem where we pick the gradient from the
-		saturation channel and the value channel, whichever is greater. The resulting solution to the Poisson equation is shown below.<br>
-		<a href="results/color2gray.png"><img class="radiance" src="results/color2gray.png"/></a><br>
+		<h3> Results </h3>
+		<table>
+		<tr><td><b>Original</b></td><td><b>Result</b></td></tr>
+		<tr><td><a href="lightning/original.gif"><img class="radiance" src="lightning/original.gif"/></a></td>
+		<td><a href="lightning/out.gif"><img class="radiance" src="lightning/out.gif"/></a></td></tr>
+		<tr><td><a href="bonfire/original.gif"><img class="radiance" src="bonfire/original.gif"/></a></td>
+		<td><a href="bonfire/out.gif"><img class="radiance" src="bonfire/out.gif"/></a></td></tr>
+		</table>
 		<p>
 		<h3>Challenges:</h3>
 		<ul>
@@ -139,7 +90,7 @@ h2 {
 		</p>
 		<p>
 		<h3> References </h3>
-		<a href="http://cs.brown.edu/courses/csci1950-g/asgn/proj2/resources/PoissonImageEditing.pdf">Poisson Image Editing</a>
+		<a href="http://www.cc.gatech.edu/cpl/projects/videotexture/SIGGRAPH2000/index.htm">Video Textures</a>
 		</p>
 		<p>
 		<h3> Source Code </h3>
