@@ -33,7 +33,7 @@ def anticipateFutureCosts(diffsMatrix,maxIters,p,alpha,tolerance):
 		minimumRowEltsMatrix = np.matrix(minimumRowEltsVector)
 		for i in range(0,numCols-1):
 			minimumRowEltsMatrix = np.vstack((minimumRowEltsMatrix,minimumRowEltsVector))
-		minimumRowEltsMatrix = minimumRowEltsMatrix.transpose()
+		#minimumRowEltsMatrix = minimumRowEltsMatrix.transpose()
 		
 		#update values of diffsMatrix
 		diffsMatrix = initialMatrix + alpha*minimumRowEltsMatrix
