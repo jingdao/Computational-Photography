@@ -3,7 +3,7 @@ from readImages import *
 from video import *
 from evaluateTransitions import *
 
-numIters = 10
+numIters = 10**6
 p = 2
 alpha = 0.999
 tolerance = 10**-3
