@@ -51,7 +51,7 @@ def anticipateFutureCosts(diffsMatrix,maxIters,p,alpha,tolerance):
 		oldMatrix = diffsMatrix
 		#print diffsMatrix
 		numIterations += 1
-		print "Maximum difference between matrix entries after last iteration: ", maxDiff
+		#print "Maximum difference between matrix entries after last iteration: ", maxDiff
 		
 		
 		if numIterations >= maxIters:
