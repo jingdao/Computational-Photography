@@ -75,13 +75,13 @@ td {
 		A video texture is a continuous stream of images captured from individual frames of an input video sequence.
 		Transitions between frames are determined by probability distribution over frames where frames that are
 		similiar to each other have a higher probability of transition. 
-		First, the L-2 distance between each pair of frames is calculated by summing over the squares of pixel differences.
+		First, the L<sub>2</sub> distance between each pair of frames is calculated by summing over the squares of pixel differences.
 		<br><a href="graphs/dist.png"><img class="graph" src="graphs/dist.png"/></a><br>
 		Next, the distances are converted into probabilities using P = exp(d/sigma) where sigma is a small multiple of
 		the average distance.
 		<br><a href="graphs/prob.png"><img class="graph" src="graphs/prob.png"/></a><br>
 		To preserve dynamics, the distance matrix is filtered with a diagonal kernel consisting of binomial weights.
-		The resulting probability matrix shows that transitions are only occur when entire subsequences have similiar frames.
+		The resulting probability matrix shows that transitions are only occur when entire subsequences have similar frames.
 		<br><a href="graphs/filtered.png"><img class="graph" src="graphs/filtered.png"/></a><br>
 
 
