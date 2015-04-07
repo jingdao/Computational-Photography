@@ -75,13 +75,13 @@ td {
 		A video texture is a continuous stream of images captured from individual frames of an input video sequence.
 		Transitions between frames are determined by probability distribution over frames where frames that are
 		similiar to each other have a higher probability of transition. 
-		First, the L-2 distance between each pair of frames is calculated by summing over the squares of pixel differences.
+		First, the L<sub>2</sub> distance between each pair of frames is calculated by summing over the squares of pixel differences.
 		<br><a href="graphs/dist.png"><img class="graph" src="graphs/dist.png"/></a><br>
 		Next, the distances are converted into probabilities using P = exp(d/sigma) where sigma is a small multiple of
 		the average distance.
 		<br><a href="graphs/prob.png"><img class="graph" src="graphs/prob.png"/></a><br>
 		To preserve dynamics, the distance matrix is filtered with a diagonal kernel consisting of binomial weights.
-		The resulting probability matrix shows that transitions are only occur when entire subsequences have similiar frames.
+		The resulting probability matrix shows that transitions are only occur when entire subsequences have similar frames.
 		<br><a href="graphs/filtered.png"><img class="graph" src="graphs/filtered.png"/></a><br>
 		To avoid dead-ends on the video sequence, an extra term is added to the distance matrix which encapsulates
 		the anticipated future costs of a transition. The future costs term is computed iteratively using a Q-learning technique.
@@ -121,8 +121,12 @@ td {
 		<tr><td><a href="waterfall/original.gif">waterfall_original</a></td>
 		<td><a href="waterfall/out.gif">waterfall_out</a></td></tr>
 		</table>
-		<h3>Cross Fading</h3>
+		<h3>Cross Fading:</h3>
 		<p>
+		Sometimes when making a transition from one frame to a new frame that is different from the first frame's predecessor in the original video, jerkiness is unavoidable.  Crossfading seeks to address this by linearly weighting previous scenes and their predecessors in the new video that we compute whenever there is a different transition than that in the original video.  Importantly, at the transition there should be equal weight between the transition and its predecessor.  This may lead to blurriness but often smooths the transition out.  While we can start weighting frames with their predecessors in advance of the transition and after the transition, for simplicity we only weighed the transition frame and its predecessor equally.  This did not make the output perfect, but still made some of our transitions a little smoother, as the following video shows. 
+		(video) 
+		</p>
+			
 		<h3>Challenges:</h3>
 		<ul>
 			<li>Processing time increases by N^2 for number of frames.</li>
@@ -131,6 +135,7 @@ td {
 			<li>Cross-fading causes blurring in the frames</li>
 		</ul>
 		</p>
+		
 		<p>
 		<h3> References </h3>
 		<a href="http://www.cc.gatech.edu/cpl/projects/videotexture/SIGGRAPH2000/index.htm">Video Textures</a>
