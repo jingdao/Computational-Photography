@@ -2,6 +2,9 @@ proj0
 *.pyc
 *.swp
 *.swo
+*.mp4
+*.flv
+data.txt
 proj2/tmp
 proj3/swing/*.png
 proj3/waterfall/*.png
