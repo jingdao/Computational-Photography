@@ -31,7 +31,7 @@ td {
 	height:300px;
 }
 .graph {
-	width:250px;
+	width:350px;
 }
 .large_graph {
 	width:500px;
@@ -72,20 +72,48 @@ td {
 	</div>
 	<div id="main">
 		<h3> Overview </h3>
+		A video texture is a continuous stream of images captured from individual frames of an input video sequence.
+		Transitions between frames are determined by probability distribution over frames where frames that are
+		similiar to each other have a higher probability of transition. 
+		First, the L-2 distance between each pair of frames is calculated by summing over the squares of pixel differences.
+		<br><a href="graphs/dist.png"><img class="graph" src="graphs/dist.png"/></a><br>
+		Next, the distances are converted into probabilities using P = exp(d/sigma) where sigma is a small multiple of
+		the average distance.
+		<br><a href="graphs/prob.png"><img class="graph" src="graphs/prob.png"/></a><br>
+		To preserve dynamics, the distance matrix is filtered with a diagonal kernel consisting of binomial weights.
+		The resulting probability matrix shows that transitions are only occur when entire subsequences have similiar frames.
+		<br><a href="graphs/filtered.png"><img class="graph" src="graphs/filtered.png"/></a><br>
+
+
+
 		<h3> Results </h3>
+		Shown below are the results of running the algorithm.
+		The animated images on the left are frames extracted from the original video sequence.
+		The animated images on the right are frames generated from the algorithm.
 		<table>
 		<tr><td><b>Original</b></td><td><b>Result</b></td></tr>
 		<tr><td><a href="lightning/original.gif"><img class="radiance" src="lightning/original.gif"/></a></td>
 		<td><a href="lightning/out.gif"><img class="radiance" src="lightning/out.gif"/></a></td></tr>
 		<tr><td><a href="bonfire/original.gif"><img class="radiance" src="bonfire/original.gif"/></a></td>
 		<td><a href="bonfire/out.gif"><img class="radiance" src="bonfire/out.gif"/></a></td></tr>
+		<tr><td><a href="fireworks/original.gif"><img class="radiance" src="fireworks/original.gif"/></a></td>
+		<td><a href="fireworks/out.gif"><img class="radiance" src="fireworks/out.gif"/></a></td></tr>
+		<tr><td><a href="wave/original.gif"><img class="radiance" src="wave/original.gif"/></a></td>
+		<td><a href="wave/out.gif"><img class="radiance" src="wave/out.gif"/></a></td></tr>
+		<tr><td><a href="swing/original.gif"><img class="radiance" src="swing/original.gif"/></a></td>
+		<td><a href="swing/out.gif"><img class="radiance" src="swing/out.gif"/></a></td></tr>
+		<tr><td><a href="bird/original.gif"><img class="radiance" src="bird/original.gif"/></a></td>
+		<td><a href="bird/out.gif"><img class="radiance" src="bird/out.gif"/></a></td></tr>
+		<tr><td><a href="waterfall/original.gif"><img class="radiance" src="waterfall/original.gif"/></a></td>
+		<td><a href="waterfall/out.gif"><img class="radiance" src="waterfall/out.gif"/></a></td></tr>
 		</table>
 		<p>
 		<h3>Challenges:</h3>
 		<ul>
-			<li>Ideal weighting ratio between gradient constraint and pixel value constraint is hard to determine.</li>
-			<li>Constructing the A matrix is tricky because the relationship between neighbouring indices is not straightforward.</li>
-			<li>Solving the Poisson equation is computationally expensive, but using a sparse matrix representation alleviates the problem.</li>
+			<li>Processing time increases by N^2 for number of frames.</li>
+			<li>Paper does not mention whether D[i,j]=0 needs to be considered when finding the minimum.</li>
+			<li>Using only a small number of frames causes the transitions to be jerky.</li>
+			<li>Cross-fading causes blurring in the frames</li>
 		</ul>
 		</p>
 		<p>
