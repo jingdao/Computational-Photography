@@ -92,20 +92,6 @@ td {
 		The animated images on the right are frames generated from the algorithm.
 		<table>
 		<tr><td><b>Original</b></td><td><b>Result</b></td></tr>
-		<!--tr><td><a href="lightning/original.gif"><img class="radiance" src="lightning/original.gif"/></a></td>
-		<td><a href="lightning/out.gif"><img class="radiance" src="lightning/out.gif"/></a></td></tr>
-		<tr><td><a href="bonfire/original.gif"><img class="radiance" src="bonfire/original.gif"/></a></td>
-		<td><a href="bonfire/out.gif"><img class="radiance" src="bonfire/out.gif"/></a></td></tr>
-		<tr><td><a href="fireworks/original.gif"><img class="radiance" src="fireworks/original.gif"/></a></td>
-		<td><a href="fireworks/out.gif"><img class="radiance" src="fireworks/out.gif"/></a></td></tr>
-		<tr><td><a href="wave/original.gif"><img class="radiance" src="wave/original.gif"/></a></td>
-		<td><a href="wave/out.gif"><img class="radiance" src="wave/out.gif"/></a></td></tr>
-		<tr><td><a href="swing/original.gif"><img class="radiance" src="swing/original.gif"/></a></td>
-		<td><a href="swing/out.gif"><img class="radiance" src="swing/out.gif"/></a></td></tr>
-		<tr><td><a href="bird/original.gif"><img class="radiance" src="bird/original.gif"/></a></td>
-		<td><a href="bird/out.gif"><img class="radiance" src="bird/out.gif"/></a></td></tr>
-		<tr><td><a href="waterfall/original.gif"><img class="radiance" src="waterfall/original.gif"/></a></td>
-		<td><a href="waterfall/out.gif"><img class="radiance" src="waterfall/out.gif"/></a></td></tr-->
 		<tr><td><a href="lightning/original.gif">lightning_original</a></td>
 		<td><a href="lightning/out.gif">lightning_out</a></td></tr>
 		<tr><td><a href="bonfire/original.gif">bonfire_original</a></td>
@@ -125,12 +111,19 @@ td {
 		<p>
 		Sometimes when making a transition from one frame to a new frame that is different from the first frame's predecessor in the original video, jerkiness is unavoidable.  Crossfading seeks to address this by linearly weighting previous scenes and their predecessors in the new video that we compute whenever there is a different transition than that in the original video.  Importantly, at the transition there should be equal weight between the transition and its predecessor.  This may lead to blurriness but often smooths the transition out.  While we can start weighting frames with their predecessors in advance of the transition and after the transition, for simplicity we only weighed the transition frame and its predecessor equally.  This did not make the output perfect, but still made some of our transitions a little smoother, as the following video shows. 
 		(video) 
+		<table>
+		<tr><td><b>Without Cross-Fading</b></td><td><b>With Cross-Fading</b></td></tr>
+		<tr><td><a href="bonfire/out.gif">bonfire</a></td>
+		<td><a href="bonfire/fade.gif">bonfire_cross_fading</a></td></tr>
+		<tr><td><a href="waterfall/out.gif">waterfall</a></td>
+		<td><a href="waterfall/fade.gif">waterfall_cross_fading</a></td></tr>
+		</table>
 		</p>
 			
 		<h3>Challenges:</h3>
 		<ul>
-			<li>Processing time increases by N^2 for number of frames.</li>
-			<li>Paper does not mention whether D[i,j]=0 needs to be considered when finding the minimum.</li>
+			<li>Processing time increases by N<sup>2</sup> for number of frames.</li>
+			<li>Paper does not mention whether D<sub>i,j</sub>=0 needs to be considered when finding the minimum.</li>
 			<li>Using only a small number of frames causes the transitions to be jerky.</li>
 			<li>Cross-fading causes blurring in the frames</li>
 		</ul>
