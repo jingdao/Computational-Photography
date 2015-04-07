@@ -33,35 +33,19 @@ def anticipateFutureCosts(diffsMatrix,maxIters,p,alpha,tolerance):
 		minimumRowEltsMatrix = np.matrix(minimumRowEltsVector)
 		for i in range(0,numCols-1):
 			minimumRowEltsMatrix = np.vstack((minimumRowEltsMatrix,minimumRowEltsVector))
-		#minimumRowEltsMatrix = minimumRowEltsMatrix.transpose()
 		
 		#update values of diffsMatrix
 		diffsMatrix = initialMatrix + alpha*minimumRowEltsMatrix
 		
 		#see if matrix values have converged
 		maxDiff = np.max(np.absolute(np.subtract(diffsMatrix,oldMatrix)))
-		#print "maximum difference: ", maxDiff
 		if maxDiff <= tolerance:
-			print("finished updating after %d iterations" % numIterations)
-			if np.all(diffsMatrix == origDiffsMatrix):
-				print "no change made to diffs matrix"
 			break
 		
 		#otherwise repeat the process
 		oldMatrix = diffsMatrix
-		#print diffsMatrix
 		numIterations += 1
-		#print "Maximum difference between matrix entries after last iteration: ", maxDiff
-		
-		
-		if numIterations >= maxIters:
-			if np.all(diffsMatrix == origDiffsMatrix):
-				print "no change made to diffs matrix"
-			print "Returning before convergence"
-			print "Maximum difference between matrix entries after last iteration: ", maxDiff
-	
-	#plt.imshow(oldMatrix)
-	#plt.figure()	
+
 	plt.imshow(diffsMatrix)
 	plt.show()	
 	return diffsMatrix

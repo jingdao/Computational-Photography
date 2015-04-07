@@ -8,10 +8,11 @@ import numpy as np
 #at transition you should be averaging equally between current and next frame
 def crossfade(frameIndices,video):
 	for index in range(0,len(frameIndices) - 1):
+		#print "current frame index: ",frameIndices[index]
 		#we make a transition that did not happen in original video
 		if frameIndices[index+1] != frameIndices[index] + 1:
 			#weight scene before transition and scene after transition equally
 			#equivalent to a weighting kernel of "radius" 1 (done for simplicity)
-			video[frameIndices[index]] = 0.5*(video[frameIndices[index]] + video[frameIndices[index+1]])
+			video[index]=video[index]/2+video[index+1]/2
 	
 	return video
