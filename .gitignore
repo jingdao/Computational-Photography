@@ -3,3 +3,6 @@ proj0
 *.swp
 *.swo
 proj2/tmp
+proj3/swing/*.png
+proj3/waterfall/*.png
+proj3/bird/*.png

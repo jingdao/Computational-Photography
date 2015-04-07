@@ -83,9 +83,9 @@ td {
 		To preserve dynamics, the distance matrix is filtered with a diagonal kernel consisting of binomial weights.
 		The resulting probability matrix shows that transitions are only occur when entire subsequences have similar frames.
 		<br><a href="graphs/filtered.png"><img class="graph" src="graphs/filtered.png"/></a><br>
-
-
-
+		To avoid dead-ends on the video sequence, an extra term is added to the distance matrix which encapsulates
+		the anticipated future costs of a transition. The future costs term is computed iteratively using a Q-learning technique.
+		<br><a href="graphs/future.png"><img class="graph" src="graphs/future.png"/></a><br>
 		<h3> Results </h3>
 		Shown below are the results of running the algorithm.
 		The animated images on the left are frames extracted from the original video sequence.
@@ -107,6 +107,7 @@ td {
 		<tr><td><a href="waterfall/original.gif"><img class="radiance" src="waterfall/original.gif"/></a></td>
 		<td><a href="waterfall/out.gif"><img class="radiance" src="waterfall/out.gif"/></a></td></tr>
 		</table>
+		<h3>Cross Fading</h3>
 		<p>
 		<h3>Challenges:</h3>
 		<ul>
