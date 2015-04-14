@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in `seq 5`
+do
+	a=$((RANDOM % 900 + 100))
+	wget http://www.raph.com/3dartists/artgallery/6$a"p.jpg"
+done

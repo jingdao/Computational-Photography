@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for i in `seq 5`
+do
+	a=$((RANDOM % 100))
+	b=$((RANDOM % 100))
+	c=$((RANDOM % 10))
+	wget http://s3.freefoto.com/images/$a/$b/$a"_"$b"_"$c"_web.jpg"
+done
