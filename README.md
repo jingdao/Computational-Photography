@@ -19,3 +19,12 @@ Project Webpage
 [Project 2] (http://jingdao.github.io/comp-photo/proj2.html)
 
 [Project 3] (http://jingdao.github.io/comp-photo/proj3.html)
+
+Image Links
+----
+
+[Real Photographs] (http://www.freefoto.com/index.jsp)
+
+[Photorealistic Images] (http://www.raph.com/3dartists/)
+
+[Random Canvas] (http://www.imagemagick.org/Usage/canvas/)
