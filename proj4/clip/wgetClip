@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+for a in `seq 211000 212000`;do
+	echo $a
+	wget -q -nc --trust-server-names https://openclipart.org/image/500px/svg_to_png/$a
+done
+
+
+

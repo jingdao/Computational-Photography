@@ -1,7 +1,12 @@
 #!/bin/bash
 
-for i in `seq 5`
+#for i in `seq 5`
+#do
+#	a=$((RANDOM % 900 + 100))
+#	wget http://www.raph.com/3dartists/artgallery/6$a"p.jpg"
+#done
+
+for i in `seq 6000 6999`
 do
-	a=$((RANDOM % 900 + 100))
-	wget http://www.raph.com/3dartists/artgallery/6$a"p.jpg"
+	wget -q http://www.raph.com/3dartists/artgallery/$i"p.jpg"
 done
