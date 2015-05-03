@@ -16,28 +16,35 @@ PRETRAINED = caffe_root+'models/'+MODEL_ZOO+'/'+MODEL_ZOO+'.caffemodel'
 IMAGE_DIR = caffe_root+'examples/images/'
 
 caffe.set_mode_cpu()
-net = caffe.Classifier(MODEL_FILE, PRETRAINED, \
-                       mean=np.load(caffe_root + 'python/caffe/imagenet/ilsvrc_2012_mean.npy').mean(1).mean(1), \
-                       channel_swap=(2,1,0), \
-                       raw_scale=255, \
-                       image_dims=(256, 256))
+net = caffe.Net(MODEL_FILE,PRETRAINED,caffe.TEST)
+#net = caffe.Classifier(MODEL_FILE, PRETRAINED, \
+#                       mean=np.load(caffe_root + 'python/caffe/imagenet/ilsvrc_2012_mean.npy').mean(1).mean(1), \
+#                       channel_swap=(2,1,0), \
+#                       raw_scale=255, \
+#                       image_dims=(256, 256))
+
 ## load labels
 #imagenet_labels_filename = caffe_root + 'data/ilsvrc12/synset_words.txt'
 #labels = np.loadtxt(imagenet_labels_filename, str, delimiter='\t')
 
-#image_list = []
-#image_names = []
+print net.blobs['data'].data.shape
+net.blobs['data'].reshape(1,3,256,256)
+print net.blobs['data'].data.shape
+
+image_list = []
+image_names = []
 features=[]
 for f in os.listdir(IMAGE_DIR):
 	if os.path.isfile(IMAGE_DIR+f):
 		input_image = caffe.io.load_image(IMAGE_DIR+f)
 #		image_names.append(f)
 #		image_list.append(input_image)
-		prediction = net.predict([input_image])
-		features.append(prediction[0])
+#		net.blobs['data'].data[...] = input_image
+#		out = net.forward()
+#		print out
+#		prediction = net.predict([input_image])
+#		features.append(prediction[0])
 
-features = np.array(features)
-np.save('features.npy',features.transpose())
 
 
 #prediction = net.predict(image_list)

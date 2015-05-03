@@ -8,7 +8,7 @@
 #	wget http://s3.freefoto.com/images/$a/$b/$a"_"$b"_"$c"_web.jpg"
 #done
 
-for a in `seq 10 20`;do
+for a in `seq 21 25`;do
 	for b in `seq 10 20`;do
 		for c in `seq 10`;do
 			wget -q http://s3.freefoto.com/images/$a/$b/$a"_"$b"_"$c"_web.jpg"

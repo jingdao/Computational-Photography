@@ -25,10 +25,16 @@ def compute_error(predictions, labels):
 
 #take in images
 if __name__ == "__main__":
-   pass
    #sketch of process:
    #images, labels, given (training and test)
    #tr_data = compute_features(images)
    #clf = train_classifier(tr_data,labels)
    #test_preds = test_classifier(clf,test_images)
    #print "Error: ", compute_error(test_preds,test_labels)
+
+	#load 2000 images, 1000 real and 1000 fake, each with 1000 features
+	#this is subdivided into 1600 for training data and 400 for test data
+	features_train = np.load('features_train.npy') #(1000,1600)
+	features_test = np.load('features_test.npy') #(1000,400)
+	labels_train =  np.load('labels_train.npy') #(1600)
+	labels_test = np.load('labels_test.npy') #(400,)

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-for a in `seq 211000 212000`;do
+for a in `seq 212200 212300`;do
 	echo $a
 	wget -q -nc --trust-server-names https://openclipart.org/image/500px/svg_to_png/$a
 done
