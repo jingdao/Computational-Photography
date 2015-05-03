@@ -28,14 +28,12 @@ def compute_error(predictions, labels):
 #take in images
 if __name__ == "__main__":
 
-   #load 2000 images, 1000 real and 1000 fake, each with 1000 features
-   #this is subdivided into 1600 for training data and 400 for test data
-   features_train = np.load('features_train.npy') #(1000,1600)
-   features_train = features_train.transpose()
-   features_test = np.load('features_test.npy') #(1000,400)
-   features_test = features_test.transpose()
-   labels_train =  np.load('labels_train.npy') #(1600)
-   labels_test = np.load('labels_test.npy') #(400,)i
+   #load 8000 images, 4000 real and 4000 fake, each with 1000 features
+   #this is subdivided into 6400 for training data and 1600 for test data
+   features_train = np.load('features_train.npy') #(6400,1000)
+   features_test = np.load('features_test.npy') #(1600,1000)
+   labels_train =  np.load('labels_train.npy') #(6400)
+   labels_test = np.load('labels_test.npy') #(1600,)i
    
    trained_classifier = train_classifier(features_train, labels_train)
    test_predictions = test_classifier(trained_classifier, features_test)

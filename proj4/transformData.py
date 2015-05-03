@@ -28,13 +28,16 @@ REAL_TEST_DIR = 'real/test/'
 FAKE_TRAIN_DIR = 'clip/train/'
 FAKE_TEST_DIR = 'clip/test/'
 dirs = [REAL_TRAIN_DIR, REAL_TEST_DIR, FAKE_TRAIN_DIR, FAKE_TEST_DIR]
-numImages = [800, 200, 800, 200]
+numImages = [3200, 800, 3200, 800]
 for j in range(4):
 	i = 0
 	d = dirs[j].split('/')[0] + '/'
+	imageNames = open(dirs[j]+'imagenames.txt','w')
 	for f in os.listdir(d):
 		if os.path.isfile(d+f) and (f.endswith('.jpg') or f.endswith('.png')):
 			i = i+1
+			print i
+			imageNames.write(f+'\n')
 			input_image = caffe.io.load_image(d+f)
 			if np.max(input_image) > 1:
 				print 'warning '+f
@@ -44,3 +47,4 @@ for j in range(4):
 #			out = net.forward()
 			if i>=numImages[j]:
 				break
+	imageNames.close()

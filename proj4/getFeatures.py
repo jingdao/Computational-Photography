@@ -17,7 +17,7 @@ REAL_TEST_DIR = 'real/test/'
 FAKE_TRAIN_DIR = 'clip/train/'
 FAKE_TEST_DIR = 'clip/test/'
 dirs = [REAL_TRAIN_DIR, REAL_TEST_DIR, FAKE_TRAIN_DIR, FAKE_TEST_DIR]
-numImages = [800, 200, 800, 200]
+numImages = [3200, 800, 3200, 800]
 
 caffe.set_mode_cpu()
 net = caffe.Net(MODEL_FILE,PRETRAINED,caffe.TEST)
@@ -25,26 +25,45 @@ net.blobs['data'].reshape(1,3,227,227)
 
 features_train=[]
 features_test=[]
+imagenames_train=[]
+imagenames_test=[]
 for j in range(4):
+	f = open(dirs[j]+'imagenames.txt')
 	for i in range(1,numImages[j]+1):
+		print i
 		input_image = np.load(dirs[j] + str(i) + '.npy')
+		imageName = f.readline()[:-1]
 		net.blobs['data'].data[...] = input_image
 		prediction = net.forward()
 		if j%2==0:
-			features_train.append(np.hstack((prediction['prob'][0],1 if j<2 else 0)))
+			imagenames_train.append(imageName)
+			features_train.append(np.hstack((prediction['prob'][0],1 if j<2 else 0,i-1)))
 		else:
-			features_test.append(np.hstack((prediction['prob'][0],1 if j<2 else 0)))
+			imagenames_test.append(imageName)
+			features_test.append(np.hstack((prediction['prob'][0],1 if j<2 else 0,i-1)))
+	f.close()
 
 features_train = np.array(features_train)
 features_test = np.array(features_test)
 np.random.shuffle(features_train)
 np.random.shuffle(features_test)
-labels_train = features_train[:,-1]
-labels_test = features_test[:,-1]
-features_train = features_train[:,:-1]
-features_test = features_test[:,:-1]
-np.save('features_train.npy',features_train.transpose())
-np.save('features_test.npy',features_test.transpose())
+labels_train = features_train[:,-2]
+labels_test = features_test[:,-2]
+features_train_save = features_train[:,:-2]
+features_test_save = features_test[:,:-2]
+np.save('features_train.npy',features_train_save)
+np.save('features_test.npy',features_test_save)
 np.save('labels_train.npy',labels_train)
 np.save('labels_test.npy',labels_test)
+
+imagenames_train_save = []
+imagenames_test_save = []
+
+for arr in features_train:
+	imagenames_train_save.append(imagenames_train[int(arr[-1])])
+	
+for arr in features_test:
+	imagenames_test_save.append(imagenames_test[int(arr[-1])]) 
+np.save('imagenames_train.npy',imagenames_train_save)
+np.save('imagenames_test.npy',imagenames_test_save)
 
