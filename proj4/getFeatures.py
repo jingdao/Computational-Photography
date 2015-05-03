@@ -16,36 +16,24 @@ REAL_TRAIN_DIR = 'real/train/'
 REAL_TEST_DIR = 'real/test/'
 FAKE_TRAIN_DIR = 'clip/train/'
 FAKE_TEST_DIR = 'clip/test/'
+dirs = [REAL_TRAIN_DIR, REAL_TEST_DIR, FAKE_TRAIN_DIR, FAKE_TEST_DIR]
+numImages = [800, 200, 800, 200]
 
 caffe.set_mode_cpu()
-net = caffe.Classifier(MODEL_FILE, PRETRAINED, \
-                       mean=np.load(caffe_root + 'python/caffe/imagenet/ilsvrc_2012_mean.npy').mean(1).mean(1), \
-                       channel_swap=(2,1,0), \
-                       raw_scale=255, \
-                       image_dims=(256, 256))
+net = caffe.Net(MODEL_FILE,PRETRAINED,caffe.TEST)
+net.blobs['data'].reshape(1,3,227,227)
 
 features_train=[]
 features_test=[]
-for f in os.listdir(REAL_TRAIN_DIR):
-	if os.path.isfile(REAL_TRAIN_DIR+f):
-		input_image = caffe.io.load_image(REAL_TRAIN_DIR+f)
-		prediction = net.predict([input_image])
-		features_train.append(np.hstack((prediction[0],1)))
-for f in os.listdir(REAL_TEST_DIR):
-	if os.path.isfile(REAL_TEST_DIR+f):
-		input_image = caffe.io.load_image(REAL_TEST_DIR+f)
-		prediction = net.predict([input_image])
-		features_test.append(np.hstack((prediction[0],1)))
-for f in os.listdir(FAKE_TRAIN_DIR):
-	if os.path.isfile(FAKE_TRAIN_DIR+f):
-		input_image = caffe.io.load_image(FAKE_TRAIN_DIR+f)
-		prediction = net.predict([input_image])
-		features_train.append(np.hstack((prediction[0],0)))
-for f in os.listdir(FAKE_TEST_DIR):
-	if os.path.isfile(FAKE_TEST_DIR+f):
-		input_image = caffe.io.load_image(FAKE_TEST_DIR+f)
-		prediction = net.predict([input_image])
-		features_test.append(np.hstack((prediction[0],0)))
+for j in range(4):
+	for i in range(1,numImages[j]+1):
+		input_image = np.load(dirs[j] + str(i) + '.npy')
+		net.blobs['data'].data[...] = input_image
+		prediction = net.forward()
+		if j%2==0:
+			features_train.append(np.hstack((prediction['prob'][0],1 if j<2 else 0)))
+		else:
+			features_test.append(np.hstack((prediction['prob'][0],1 if j<2 else 0)))
 
 features_train = np.array(features_train)
 features_test = np.array(features_test)
