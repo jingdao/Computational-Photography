@@ -35,12 +35,13 @@ for j in range(4):
 		imageName = f.readline()[:-1]
 		net.blobs['data'].data[...] = input_image
 		prediction = net.forward()
+		output_features = net.blobs['fc8'].data[0]
 		if j%2==0:
 			imagenames_train.append(imageName)
-			features_train.append(np.hstack((prediction['prob'][0],1 if j<2 else 0,i-1)))
+			features_train.append(np.hstack((output_features,1 if j<2 else 0,i-1)))
 		else:
 			imagenames_test.append(imageName)
-			features_test.append(np.hstack((prediction['prob'][0],1 if j<2 else 0,i-1)))
+			features_test.append(np.hstack((output_features,1 if j<2 else 0,i-1)))
 	f.close()
 
 features_train = np.array(features_train)
@@ -51,19 +52,26 @@ labels_train = features_train[:,-2]
 labels_test = features_test[:,-2]
 features_train_save = features_train[:,:-2]
 features_test_save = features_test[:,:-2]
-np.save('features_train.npy',features_train_save)
-np.save('features_test.npy',features_test_save)
-np.save('labels_train.npy',labels_train)
-np.save('labels_test.npy',labels_test)
+np.save('features_train_fc8.npy',features_train_save)
+np.save('features_test_fc8.npy',features_test_save)
+np.save('labels_train_fc8.npy',labels_train)
+np.save('labels_test_fc8.npy',labels_test)
 
 imagenames_train_save = []
 imagenames_test_save = []
 
 for arr in features_train:
-	imagenames_train_save.append(imagenames_train[int(arr[-1])])
+	if (arr[-2]>0.5):
+		imagenames_train_save.append(imagenames_train[int(arr[-1])])
+	else:
+		imagenames_train_save.append(imagenames_train[int(arr[-1]) + numImages[0]])
 	
 for arr in features_test:
-	imagenames_test_save.append(imagenames_test[int(arr[-1])]) 
-np.save('imagenames_train.npy',imagenames_train_save)
-np.save('imagenames_test.npy',imagenames_test_save)
+	if (arr[-2]>0.5):
+		imagenames_test_save.append(imagenames_test[int(arr[-1])])
+	else:
+		imagenames_test_save.append(imagenames_test[int(arr[-1]) + numImages[1]])
+	
+np.save('imagenames_train_fc8.npy',imagenames_train_save)
+np.save('imagenames_test_fc8.npy',imagenames_test_save)
 
