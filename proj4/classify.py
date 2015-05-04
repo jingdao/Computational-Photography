@@ -30,10 +30,12 @@ if __name__ == "__main__":
 
    #load 8000 images, 4000 real and 4000 fake, each with 1000 features
    #this is subdivided into 6400 for training data and 1600 for test data
-   features_train = np.load('features_train.npy') #(6400,1000)
-   features_test = np.load('features_test.npy') #(1600,1000)
-   labels_train =  np.load('labels_train.npy') #(6400)
-   labels_test = np.load('labels_test.npy') #(1600,)i
+   features_train = np.load('features_train_prob.npy') #(6400,1000)
+   features_test = np.load('features_test_prob.npy') #(1600,1000)
+   labels_train =  np.load('labels_train_prob.npy') #(6400)
+   labels_test = np.load('labels_test_prob.npy') #(1600,)i
+   imagenames_train = np.load('imagenames_train_prob.npy')
+   imagenames_test = np.load('imagenames_test_prob.npy')
    
    trained_classifier = train_classifier(features_train, labels_train)
    train_predictions = make_predictions(trained_classifier, features_train)

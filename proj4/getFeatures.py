@@ -17,7 +17,7 @@ REAL_TEST_DIR = 'real/test/'
 FAKE_TRAIN_DIR = 'clip/train/'
 FAKE_TEST_DIR = 'clip/test/'
 dirs = [REAL_TRAIN_DIR, REAL_TEST_DIR, FAKE_TRAIN_DIR, FAKE_TEST_DIR]
-numImages = [3200, 800, 3200, 800]
+numImages = [1600, 400, 1600, 400]
 
 caffe.set_mode_cpu()
 net = caffe.Net(MODEL_FILE,PRETRAINED,caffe.TEST)
@@ -35,7 +35,7 @@ for j in range(4):
 		imageName = f.readline()[:-1]
 		net.blobs['data'].data[...] = input_image
 		prediction = net.forward()
-		output_features = net.blobs['fc8'].data[0]
+		output_features = net.blobs['fc7'].data[0]
 		if j%2==0:
 			imagenames_train.append(imageName)
 			features_train.append(np.hstack((output_features,1 if j<2 else 0,i-1)))
@@ -52,10 +52,10 @@ labels_train = features_train[:,-2]
 labels_test = features_test[:,-2]
 features_train_save = features_train[:,:-2]
 features_test_save = features_test[:,:-2]
-np.save('features_train_fc8.npy',features_train_save)
-np.save('features_test_fc8.npy',features_test_save)
-np.save('labels_train_fc8.npy',labels_train)
-np.save('labels_test_fc8.npy',labels_test)
+np.save('features_train_fc7.npy',features_train_save)
+np.save('features_test_fc7.npy',features_test_save)
+np.save('labels_train_fc7.npy',labels_train)
+np.save('labels_test_fc7.npy',labels_test)
 
 imagenames_train_save = []
 imagenames_test_save = []
@@ -72,6 +72,6 @@ for arr in features_test:
 	else:
 		imagenames_test_save.append(imagenames_test[int(arr[-1]) + numImages[1]])
 	
-np.save('imagenames_train_fc8.npy',imagenames_train_save)
-np.save('imagenames_test_fc8.npy',imagenames_test_save)
+np.save('imagenames_train_fc7.npy',imagenames_train_save)
+np.save('imagenames_test_fc7.npy',imagenames_test_save)
 

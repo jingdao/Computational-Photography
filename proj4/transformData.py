@@ -23,28 +23,26 @@ transformer.set_mean('data', mn) # mean pixel
 transformer.set_raw_scale('data', 255)  # the reference model operates on images in [0,255] range instead of [0,1]
 transformer.set_channel_swap('data', (2,1,0))  # the reference model has channels in BGR order instead of RGB
 
-REAL_TRAIN_DIR = 'real/train/'
-REAL_TEST_DIR = 'real/test/'
-FAKE_TRAIN_DIR = 'clip/train/'
-FAKE_TEST_DIR = 'clip/test/'
-dirs = [REAL_TRAIN_DIR, REAL_TEST_DIR, FAKE_TRAIN_DIR, FAKE_TEST_DIR]
-numImages = [3200, 800, 3200, 800]
-for j in range(4):
-	i = 0
-	d = dirs[j].split('/')[0] + '/'
-	imageNames = open(dirs[j]+'imagenames.txt','w')
+#for d in ['real/','fake/']:
+for d in ['clip/']:
+	imArray=[]
 	for f in os.listdir(d):
 		if os.path.isfile(d+f) and (f.endswith('.jpg') or f.endswith('.png')):
-			i = i+1
-			print i
-			imageNames.write(f+'\n')
-			input_image = caffe.io.load_image(d+f)
-			if np.max(input_image) > 1:
-				print 'warning '+f
-			input_image = transformer.preprocess('data',input_image)
-			np.save(dirs[j] + str(i) + '.npy',input_image)
-#			net.blobs['data'].data[...] = input_image
-#			out = net.forward()
-			if i>=numImages[j]:
-				break
+			imArray.append(f)
+	np.random.shuffle(imArray)
+	imageNames = open(d+'train/imagenames.txt','w')
+	for i in range(1600):
+		print i
+		imageNames.write(imArray[i]+'\n')
+		input_image = caffe.io.load_image(d+imArray[i])
+		input_image = transformer.preprocess('data',input_image)
+		np.save(d+'train/'+str(i+1)+'.npy',input_image)
+	imageNames.close()
+	imageNames = open(d+'test/imagenames.txt','w')
+	for i in range(400):
+		print i
+		imageNames.write(imArray[i+1600]+'\n')
+		input_image = caffe.io.load_image(d+imArray[i+1600])
+		input_image = transformer.preprocess('data',input_image)
+		np.save(d+'test/'+str(i+1)+'.npy',input_image)
 	imageNames.close()

@@ -27,4 +27,8 @@ Image Links
 
 [Photorealistic Images] (http://www.raph.com/3dartists/)
 
+[Clip Art] (https://openclipart.org/)
+
 [Random Canvas] (http://www.imagemagick.org/Usage/canvas/)
+
+[Photorealistic Images] (http://max3d.pl)

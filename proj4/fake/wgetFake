@@ -6,7 +6,17 @@
 #	wget http://www.raph.com/3dartists/artgallery/6$a"p.jpg"
 #done
 
-for i in `seq 6000 6999`
-do
-	wget -q http://www.raph.com/3dartists/artgallery/$i"p.jpg"
+#for i in `seq 5000 5999`
+#do
+#	echo $i
+#	wget -q http://www.raph.com/3dartists/artgallery/$i"p.jpg"
+#done
+
+for i in `seq 2013 2015`; do
+	for j in `seq 1 12`; do
+		for k in `seq 1 200`; do
+			echo $i-$j-$k
+			wget -q http://www.3dmodelfree.com/imguploads/Image/1106/model/$i/$j/$k.jpg -O $i-$j-$k.jpg
+		done
+	done
 done
