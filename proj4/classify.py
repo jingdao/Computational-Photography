@@ -5,14 +5,14 @@ from sklearn import svm
 #supervised: also takes in training labels
 #returns a classifier (a hypothesis)
 def train_classifier(training_data, training_labels):
-   #support vector classification with linear kernel
-   classifier = svm.SVC()
+   #kernelized SVM for classification
+   classifier = svm.SVC(kernel='rbf') #leave blank or 'linear' for linear SVM
    classifier.fit(training_data, training_labels)
    return classifier
 
-#test on test data
-#takes in a machine learning hypothesis and test data
-def test_classifier(classifier, test_data):
+#compute predictions for figuring out training error or making test predictions
+#takes in a machine learning hypothesis and makes predictions on it
+def make_predictions(classifier, test_data):
    predictions = classifier.predict(test_data)
    return predictions
 
@@ -38,6 +38,10 @@ if __name__ == "__main__":
    labels_test = np.load('labels_test.npy') #(400,)i
    
    trained_classifier = train_classifier(features_train, labels_train)
-   test_predictions = test_classifier(trained_classifier, features_test)
+   train_predictions = make_predictions(trained_classifier, features_train)
+   train_error = compute_error(train_predictions, labels_train)
+   print("Training error: %d" % train_error)
+
+   test_predictions = make_predictions(trained_classifier, features_test)
    test_error = compute_error(test_predictions, labels_test)
-   print("Error rate: %f" % test_error)
+   print("Test error: %f" % test_error)
