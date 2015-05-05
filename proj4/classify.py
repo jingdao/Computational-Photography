@@ -30,13 +30,27 @@ if __name__ == "__main__":
 
    #load 8000 images, 4000 real and 4000 fake, each with 1000 features
    #this is subdivided into 6400 for training data and 1600 for test data
-   features_train = np.load('features_train_prob.npy') #(6400,1000)
-   features_test = np.load('features_test_prob.npy') #(1600,1000)
-   labels_train =  np.load('labels_train_prob.npy') #(6400)
-   labels_test = np.load('labels_test_prob.npy') #(1600,)i
-   imagenames_train = np.load('imagenames_train_prob.npy')
-   imagenames_test = np.load('imagenames_test_prob.npy')
+   features_train8 = np.load('features/features_train_fc8.npy')
+   features_test8 = np.load('features/features_test_fc8.npy') 
+   labels_train =  np.load('features/labels_train_fc8.npy') 
+   labels_test = np.load('features/labels_test_fc8.npy') 
+   imagenames_train = np.load('features/imagenames_train_fc8.npy')
+   imagenames_test = np.load('features/imagenames_test_fc8.npy')
+ 
    
+   features_train7 = np.load('features/features_train_fc7.npy')
+   features_test7 = np.load('features/features_test_fc7.npy')
+
+   features_train = np.concatenate((features_train8, features_train7),axis=1) 
+   features_test = np.concatenate((features_test8, features_test7),axis=1)
+
+   numTrain = features_train.shape[0]
+   numTest = features_test.shape[0]
+   numFeatures = features_test.shape[1]
+   print("There are %d train and %d test points with %d features" % (numTrain, numTest, numFeatures)) 
+   
+   
+
    trained_classifier = train_classifier(features_train, labels_train)
    train_predictions = make_predictions(trained_classifier, features_train)
    train_error = compute_error(train_predictions, labels_train)
