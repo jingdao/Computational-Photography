@@ -76,6 +76,13 @@ td {
 	text-align:center;
 	font-size: 500%;
 }
+table, th, td {
+	border: 1px solid black;
+}
+th, td {
+	width: 100px;
+	height: 50px;
+}
 </style>
 <style type="text/css"></style></head>
 <body>
@@ -98,11 +105,6 @@ td {
 			<input type="submit" name="submit" value="Upload">
 		</form>
 		<p>
-		<div class="radiance_div">
-			<img class="graph" src="graphs/mean_features.png"><br>
-		</div>
-		</p>
-		<p>
 
 
 
@@ -110,15 +112,58 @@ td {
 		</p>
 		<h3>Introduction</h3>
 		<p> Digital photography has made it easier than ever to capture realistic-looking portraits of the world, but so have advances in computer graphics.  Many profound developments have made their way into commercial image-editing software, so that it is now possible for almost anyone to make all manner of non-photorealistic images as well as extremely photorealistic images.  Separating natural, unaltered photographs of real-life scenes from altered or artifically constructed images can thus be a challenge.  It is very important to do so, however, as images become sensations on social media or are submitted into evidence in courts of law.  </p>
-<br>
-<p>
-We gathered data of real images and a variety of fake images, including clip art as well as more photorealistic renderings, to train a machine learning classifier to predict whether images were real or altered.  We continued in the machine learning vein of Lyu and Farid (2005), but we took advantage of recent developments in deep learning to learn a richer representation of the data as features for our classifier On a separate test dataset, we demonstrate that our model is able to distinguish between natural and altered images with an extremely high degree of accuracy.    
-</p>
-       		<h3>Data</h3>
-<p>Here's how much data we had.  Where we got it from, how we preprocessed it. </p>
+		<br>
+		<p>
+		We gathered data of real images and a variety of fake images, including clip art as well as more photorealistic renderings, to train a machine learning classifier to predict whether images were real or altered.  We continued in the machine learning vein of Lyu and Farid (2005), but we took advantage of recent developments in deep learning to learn a richer representation of the data as features for our classifier On a separate test dataset, we demonstrate that our model is able to distinguish between natural and altered images with an extremely high degree of accuracy.    
+		</p>
+		<p>
+       	<h3>Data</h3>
+		The image data was taken from several websites to cover a variety of image categories.
+		Real images were taken from photographs of buildings, sceneries and objects while fake images were taken from clip art, 3D rendered models and photorealistic images.
+		We gathered 6000 real and 6000 fake images in total which constitutes our final data set. However, we found that even with a smaller sample size of 2000 images in each category, we were able to generate comparable results to the full data set.
+		The images below show examples of pictures from our data set.<br><br>
+		<div class="radiance_div"><img class="radiance" src="graphs/real1.jpg">
+		<img class="radiance" src="graphs/real2.jpg"><br><br>
+		<b>Real data set</b><br><br> </div>
+		<div class="radiance_div"><img class="radiance" src="graphs/easy1.png">
+		<img class="radiance" src="graphs/easy2.png"><br><br>
+		<b>Easy fake data set</b><br><br> </div>
+		<div class="radiance_div"><img class="radiance" src="graphs/hard1.jpg">
+		<img class="radiance" src="graphs/hard2.jpg"><br><br>
+		<b>Hard fake data set</b><br><br> </div>
 
+		Before using the images as input to the neural network, we preprocessed them by resizing to a standard dimension and subtracted the image mean.
+		The images were labelled as either real or fake and collected in an array.
+		They are then separated into 80% training data and 20% test data in randomized order.
+		</p>
+		<p>
 		<h3>Methodology and Results</h3>
-<p>Here's our basic methodology and results. <p>
+
+		Our method relies on the pre-trained <i>AlexNet</i> neural network, available through <i>Caffe</i> Deep Learning Framework.
+		For each input image, a forward iteration is performed to output values at convolutional, pooling and fully connected layers.
+		For example the graph below shows the mean value of each of the 4096 features at the 'fc7' layer for real vs fake images.<br><br>
+		<div class="radiance_div">
+			<img class="graph" src="graphs/mean_features.png"><br><br>
+		</div>
+
+		The features were taken from 4 different layers of the neural network, namely the inner fully connected layers fc6, fc7, fc8 and the top layer probability output, prob.
+		The feature values were saved to file in matrices of N x D where N is the number of images and D is the number of features.
+		The label for each image (0 for fake images and 1 for real images) was saved in a separate N x 1 array.<br><br>
+
+		We then applied a Logistic Regression model to the data using the <i>scikit-learn</i> platform.
+		The classifier was trained wth 80% of our data and the remaining 20% was used to test the classifier.
+		The test error was measured in terms of differences between predicted labels and true labels.  
+
+		The test results are tabulated below: (the test error range indicates difference between easy and hard data sets) <br><br>
+		<table><tr> <th><b>Layer</b></th> <th>fc6</th> <th>fc7</th> <th>fc8</th> <th>prob</th> <th>fc7</th> <th>fc8</th></tr>
+		<tr> <td><b>Number of features</b></td> <td>4096</td> <td>1000</td> <td>1000</td> <td>1000</td> <td>4096</td> <td>1000</td></tr>
+		<tr> <td><b>Total images</b></td> <td>4000</td> <td>4000</td> <td>4000</td> <td>4000</td> <td>12000</td> <td>12000</td></tr>
+		<tr> <td><b>Test error (%)</b></td> <td>0.5 - 3.6</td> <td>0.8 - 4.4</td> <td>1.1 - 5.5</td> <td>6.8 - 12.0</td> <td>2.3</td> <td>3.8</td></tr>
+		</table>
+		<br><br>
+		Overall, the method showed quite excellent performance in terms of test error rate.
+		We found that using the fully connected hidden layers achieves the best results, with an error rate as low as 0.5%.
+		</p>
        
 		<h3>Discussion</h3>
 		Challenges:	
@@ -126,8 +171,12 @@ We gathered data of real images and a variety of fake images, including clip art
 			<li>Setting up the neural network and its dependencies took a while.</li>
 			<li>Long processing times.</li>
 		</ul>
-		<p></p>
-		
+		Future Work:
+		<ul>
+			<li>Concatenate feature arrays from multiple layers.</li>
+			<li>Collect more data.</li>
+			<li>Experiment with different CNN architectures.</li>
+		</ul>
 		<p>
 		<h3> Image Dataset </h3>
 		The images used for training and test data were taken from the following websites:<br>
