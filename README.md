@@ -20,15 +20,5 @@ Project Webpage
 
 [Project 3] (http://jingdao.github.io/comp-photo/proj3.html)
 
-Image Links
-----
+[Project 4] (http://jingdao.github.io/comp-photo/proj4.html)
 
-[Real Photographs] (http://www.freefoto.com/index.jsp)
-
-[Photorealistic Images] (http://www.raph.com/3dartists/)
-
-[Clip Art] (https://openclipart.org/)
-
-[Random Canvas] (http://www.imagemagick.org/Usage/canvas/)
-
-[Photorealistic Images] (http://max3d.pl)
