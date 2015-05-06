@@ -1,21 +1,25 @@
 import numpy as np
-from sklearn import svm
+from sklearn import linear_model,svm
 
 #trains a machine learning classifier on a training data set
 #supervised: also takes in training labels
 #returns a classifier (a hypothesis)
 def train_classifier(training_data, training_labels):
    #kernelized SVM for classification
-   classifier = svm.SVC(kernel='rbf') #leave blank or 'linear' for linear SVM
+   #classifier = svm.SVC(kernel='rbf') #leave blank or 'linear' for linear SVM
+   classifier = linear_model.LogisticRegression()
    classifier.fit(training_data, training_labels)
    return classifier
 
 #compute predictions for figuring out training error or making test predictions
 #takes in a machine learning hypothesis and makes predictions on it
-def make_predictions(classifier, test_data):
-   predictions = classifier.predict(test_data)
+def make_predictions(classifier, data):
+   predictions = classifier.predict(data)
    return predictions
 
+def predict_probs(classifier, data):
+   predict_probs = classifier.predict_proba(data)
+   return predict_probs
 #takes in a set of predictions and true labels and computes error
 #could be used to compute training or test error
 def compute_error(predictions, labels):
@@ -35,21 +39,23 @@ if __name__ == "__main__":
    labels_train =  np.load('features/labels_train_fc8.npy') 
    labels_test = np.load('features/labels_test_fc8.npy') 
    imagenames_train = np.load('features/imagenames_train_fc8.npy')
-   imagenames_test = np.load('features/imagenames_test_fc8.npy')
- 
+   imagenames_test = np.load('features/imagenames_test_fc8.npy') 
    
+   #'''
    features_train7 = np.load('features/features_train_fc7.npy')
    features_test7 = np.load('features/features_test_fc7.npy')
 
+   #features_train6 = np.load('features/features_train_fc6.npy')
+   #features_test6 = np.load('features/features_test_fc6.npy')
+
    features_train = np.concatenate((features_train8, features_train7),axis=1) 
    features_test = np.concatenate((features_test8, features_test7),axis=1)
-
+   #'''
+   
    numTrain = features_train.shape[0]
    numTest = features_test.shape[0]
    numFeatures = features_test.shape[1]
    print("There are %d train and %d test points with %d features" % (numTrain, numTest, numFeatures)) 
-   
-   
 
    trained_classifier = train_classifier(features_train, labels_train)
    train_predictions = make_predictions(trained_classifier, features_train)
