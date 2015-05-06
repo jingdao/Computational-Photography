@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://localhost:8000/upload -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Project 4</title>
+<style type="text/css">
+body{
+	/*width: 760px; /* how wide to make your web page */
+	/*background-color: #dddddd;*/ /* what color to make the background */
+	margin: 0 auto;
+	/*padding: 50px;*/
+	font:12px/16px Verdana, sans-serif; /* default font */
+}
+div#main{
+	/*background-color: #dddddd;*/
+	margin: 0;
+	padding: 50px;
+	/*padding: 10px;*/
+}
+h1 {
+	text-decoration: underline;
+	text-align:center;
+}
+h2 {
+	text-align:center;
+}
+td {
+	text-align:center;
+	vertical-align:center;
+}
+.radiance {
+	height:300px;
+}
+.graph {
+	width:350px;
+}
+.large_graph {
+	width:500px;
+}
+.photo {
+	width:100px;
+	display:none;
+}
+.equation {
+	font-style:italic;
+	font-family: serif;
+	font-size: 200%;
+	text-align:center;
+}
+.poster {
+	text-align: center;
+	max-height: 500px;
+	max-width: 500px;
+}
+.radiance_div {
+	text-align:center;
+}
+#title-div {
+	height:20vh;
+}
+#poster-div {
+	height: 50vh;
+	text-align:center;
+}
+#FAKE {
+	text-align:center;
+	color: red;
+	font-size: 500%;
+}
+#REAL {
+	text-align:center;
+	color: green;
+	font-size: 500%;
+}
+#ERROR {
+	text-align:center;
+	font-size: 500%;
+}
+</style>
+<style type="text/css"></style></head>
+<body>
+	<div id="title-div">
+	<h1> CSE 555 (Computational Photography) Project 4 </h1>
+	<h1> Real/fake image classification with Machine Learning </h1>
+	<h2> Mark Heimann &amp; Jing Dao Chen 05/06/2015 </h2>
+	</div>
+
+	<div id="FAKE"><b><i> FAKE (1.3527%)</i></b></div><br><br>
+	<div id="poster-div">
+		<img class="poster" src="./graphs/img"><br>
+	</div>
+
+	<div id="main">		
+		<h3> Upload Photo </h3>
+		<form id="uploadForm" action="./proj4_files/proj4.html" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="csrfmiddlewaretoken" value="cn4tUFay4tG50iAFusE1p9f7RjJX14mM">
+		    <input type="file" name="myfile">
+			<input type="submit" name="submit" value="Upload">
+		</form>
+		<p>
+		</p><h3>Challenges:</h3>
+		<ul>
+			<li>Long processing times.</li>
+		</ul>
+		<p></p>
+		
+		<p>
+		</p><h3> References </h3>
+		<a href="http://www.ists.dartmouth.edu/library/31.pdf">How Realistic is Photorealistic?</a>
+		<p></p>
+		<p>
+		</p><h3> Source Code </h3>
+		<a href="https://github.com/jingdao/Computational-Photography">https://github.com/jingdao/Computational-Photography</a>
+		<p></p>
+	</div>
+
+
+</body></html>
