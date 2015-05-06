@@ -111,9 +111,8 @@ th, td {
 
 		</p>
 		<h3>Introduction</h3>
-		<p> Digital photography has made it easier than ever to capture realistic-looking portraits of the world, but so have advances in computer graphics.  Many profound developments have made their way into commercial image-editing software, so that it is now possible for almost anyone to make all manner of non-photorealistic images as well as extremely photorealistic images.  Separating natural, unaltered photographs of real-life scenes from altered or artifically constructed images can thus be a challenge.  It is very important to do so, however, as images become sensations on social media or are submitted into evidence in courts of law.  </p>
-		<br>
-		<p>
+		<p> Digital photography has made it easier than ever to capture realistic-looking portraits of the world, but so have advances in computer graphics.  Many profound developments have made their way into commercial image-editing software, so that it is now possible for almost anyone to make all manner of non-photorealistic images as well as extremely photorealistic images.  Separating natural, unaltered photographs of real-life scenes from altered or artifically constructed images can thus be a challenge.  It is very important to do so, however, as images become sensations on social media or are submitted into evidence in courts of law.  
+		<br><br>
 		We gathered data of real images and a variety of fake images, including clip art as well as more photorealistic renderings, to train a machine learning classifier to predict whether images were real or altered.  We continued in the machine learning vein of Lyu and Farid (2005), but we took advantage of recent developments in deep learning to learn a richer representation of the data as features for our classifier On a separate test dataset, we demonstrate that our model is able to distinguish between natural and altered images with an extremely high degree of accuracy.    
 		</p>
 		<p>
@@ -132,29 +131,31 @@ th, td {
 		<img class="radiance" src="graphs/hard2.jpg"><br><br>
 		<b>Hard fake data set</b><br><br> </div>
 
-		Before using the images as input to the neural network, we preprocessed them by resizing to a standard dimension and subtracted the image mean.
+		Before using the images as input to a machine learning algorithm, we preprocessed them by resizing to a standard dimension and subtracted the image mean.
 		The images were labelled as either real or fake and collected in an array.
 		They are then separated into 80% training data and 20% test data in randomized order.
 		</p>
 		<p>
 		<h3>Methodology and Results</h3>
-
-		Our method relies on the pre-trained <i>AlexNet</i> neural network, available through <i>Caffe</i> Deep Learning Framework.
+		While Lyu and Farid (2005) used fewer features and attempted to explain how these features would be different in natural versus altered images, we made it our goal to maximize predictive accuracy.  Deep learning has allowed for great breakthroughs in predictive accuracy in a number of machine learning and computer vision tasks by learning a richer representation of the data, on top of which an ordinary machine learning classifier (such as an SVM or regression model) can be trained.  In particular, convolutional neural networks have achieved excellent results on many computer vision tasks.  Some of the layers of a convolutional neural network contains many groups of neurons that look at overlapping portions of an image, whose output can be pooled together to gain a better representation of each part of the image.  Often the convolutional layers are followed by several fully connected layers like a standard artificial neural network before an output layer that actually makes the predictions.  Because of the success of this technique for many other image classification tasks, we decided to use a representation of our data learned with a convolutional neural network.  
+<br><br> 
+		Convolutional neural networks often require massive amounts of data, and even with high-tech GPUs and plenty of computational resources, can take days to train and are generally difficult to work with.  Our method relies on the pre-trained <i>AlexNet</i> neural network, described in a paper by Krizhevsky et. al (2012) and available through the <i>Caffe</i> Deep Learning Framework.
 		For each input image, a forward iteration is performed to output values at convolutional, pooling and fully connected layers.
 		For example the graph below shows the mean value of each of the 4096 features at the 'fc7' layer for real vs fake images.<br><br>
 		<div class="radiance_div">
 			<img class="graph" src="graphs/mean_features.png"><br><br>
 		</div>
 
-		The features were taken from 4 different layers of the neural network, namely the inner fully connected layers fc6, fc7, fc8 and the top layer probability output, prob.
-		The feature values were saved to file in matrices of N x D where N is the number of images and D is the number of features.
-		The label for each image (0 for fake images and 1 for real images) was saved in a separate N x 1 array.<br><br>
+		AlexNet contains 5 convolutional layers, 3 fully connected hidden layers on top of that, and an additional output layer for making the predictions.  We tried taking our features from the top 4 different layers of the neural network, namely the fully connected hidden layers fc6, fc7, fc8 and the top (output) layer, prob.
+		we saved the feature values to a file in matrices of size N x D where N is the number of images and D is the number of features.
+		Meanwhile, we also saved the label for each image (0 for fake images and 1 for real images)  in a separate N x 1 array.<br><br>
 
-		We then applied a Logistic Regression model to the data using the <i>scikit-learn</i> platform.
+		We then applied a logistic regression model to the data using the <i>scikit-learn</i> platform.  We also tried a linear SVM and a SVM with a radial basis function (RBF) kernel, the latter of which was used by Lyu and Farid (2005), but found that although all three produced good results, the error from logistic regression was the lowest.  Thus, we report its results below.  
 		The classifier was trained wth 80% of our data and the remaining 20% was used to test the classifier.
 		The test error was measured in terms of differences between predicted labels and true labels.  
 
-		The test results are tabulated below: (the test error range indicates difference between easy and hard data sets) <br><br>
+		The test results are tabulated below (the test error range indicates difference between easy and hard data sets): <br><br>
+
 		<table><tr> <th><b>Layer</b></th> <th>fc6</th> <th>fc7</th> <th>fc8</th> <th>prob</th> <th>fc7</th> <th>fc8</th></tr>
 		<tr> <td><b>Number of features</b></td> <td>4096</td> <td>1000</td> <td>1000</td> <td>1000</td> <td>4096</td> <td>1000</td></tr>
 		<tr> <td><b>Total images</b></td> <td>4000</td> <td>4000</td> <td>4000</td> <td>4000</td> <td>12000</td> <td>12000</td></tr>
@@ -166,17 +167,15 @@ th, td {
 		</p>
        
 		<h3>Discussion</h3>
-		Challenges:	
-		<ul>
-			<li>Setting up the neural network and its dependencies took a while.</li>
-			<li>Long processing times.</li>
-		</ul>
-		Future Work:
-		<ul>
-			<li>Concatenate feature arrays from multiple layers.</li>
-			<li>Collect more data.</li>
-			<li>Experiment with different CNN architectures.</li>
-		</ul>
+		We were quite happy with the low error we got on both our easy and hard data sets.  For reference, Lyu and Farid (2005), got test error of around 30%.  
+<br><br>
+		To be fair, though, Lyu and Farid also used a slightly larger dataset (tens of thousands instead of thousands of images), though they did not make it publicly available to allow for direct comparison of techniques.  Indeed, one of our concerns is that we are overfitting given that we have such a small dataset.  	
+	<br><br>	
+		On a practical level, we note that working with deep learning techniques brings its own set of challenges.  For example, setting up Caffe and AlexNet along with their dependences took a long time.  We also had slightly long processing times, though on the order of minutes rather than days.  
+		<br><br>		
+		Future work should definitely involve collecting more data, as deep learning techniques shine on large-scale problems.  We could also consider experimenting with the features we use, for example by concatenating feature arrays from multiple layers of the neural network.  A more involved approach might be to experiment with different architectures of the convolutional neural network itself, particularly if the goal is serious image forensics where detection of the most subtle alterations is critical.  A convolutional neural network with local pooling layers might better pick up slight adjustments made to one part of an image.  
+		<br><br>
+Overall, however, we think that deep learning is a promising approach for image forensics (as it is for many other tasks in computer vision). Our results may not close the book on the subject, but they are promising and can hopefully encourage further exploration in this direction.  
 		<p>
 		<h3> Image Dataset </h3>
 		The images used for training and test data were taken from the following websites:<br>
